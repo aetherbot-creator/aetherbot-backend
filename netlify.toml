@@ -1,0 +1,20 @@
+[build]
+  functions = "netlify/functions"
+  publish = "public"
+  command = "npm install"
+
+[dev]
+  functions = "netlify/functions"
+  publish = "public"
+  targetPort = 8888
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  # Use esbuild bundler for production to include dependencies
+  node_bundler = "esbuild"
+  # Set external node modules that should not be bundled
+  external_node_modules = []
