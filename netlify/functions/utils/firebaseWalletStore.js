@@ -34,7 +34,7 @@
 class FirebaseWalletStore {
   constructor() {
     // Use environment variables with hardcoded fallback for local development
-    this.projectId = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+    this.projectId = process.env.FIREBASE_PROJECT_ID || 'aetherbot-test';
     this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
     
     // Validate that we have values

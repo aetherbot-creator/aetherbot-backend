@@ -2,6 +2,75 @@
 
 A complete serverless backend system built for Netlify Functions that provides **wallet-based authentication** with **balance management** and **transaction tracking** - perfect for blockchain/Web3 applications.
 
+---
+
+## ⚠️ LEGAL DISCLAIMER & RESPONSIBLE USE POLICY
+
+**READ THIS CAREFULLY BEFORE USING THIS SOFTWARE**
+
+### Intended Use
+This software is designed **EXCLUSIVELY** for **legitimate, legal, and educational purposes** including:
+- Educational projects and learning blockchain development
+- Personal portfolio demonstrations
+- Testing and development environments
+- Legal business applications with proper licensing
+- Academic research and experimentation
+
+### Prohibited Activities
+**THIS SOFTWARE MUST NOT BE USED FOR:**
+- ❌ Any form of fraudulent activities
+- ❌ Scamming, phishing, or deceiving users
+- ❌ Unauthorized access to funds or wallets
+- ❌ Money laundering or illegal financial activities
+- ❌ Ponzi schemes, pyramid schemes, or similar scams
+- ❌ Theft, manipulation, or misappropriation of digital assets
+- ❌ Violation of any local, state, national, or international laws
+- ❌ Any activity that harms individuals or organizations
+
+### User Responsibility
+By using this software, you acknowledge and agree that:
+1. **You are solely responsible** for compliance with all applicable laws and regulations
+2. **You will use this software ethically** and in accordance with all legal requirements
+3. **You will not engage in any fraudulent or illegal activities** using this software
+4. **The developers are not liable** for any misuse of this software
+
+### Reporting Fraudulent Use
+If you discover this software being used for fraudulent activities:
+
+**🚨 REPORT IMMEDIATELY:**
+- **Email**: abuse@github.com (for GitHub-hosted projects)
+- **Platform Abuse**: Report to the hosting platform (Netlify, Vercel, etc.)
+- **Legal Authorities**: Contact local law enforcement or cybercrime units
+- **Domain Registrar**: Report domain abuse to registrar (GoDaddy, Namecheap, etc.)
+
+**How to Report:**
+1. Document the fraudulent site URL and activity
+2. Take screenshots of suspicious behavior
+3. Report to the hosting provider's abuse department
+4. File a complaint with relevant authorities (FBI IC3, local police, etc.)
+5. Report to domain registrar for immediate takedown
+
+### Developer Liability
+The developers of this software:
+- **Do not endorse** any fraudulent or illegal use
+- **Are not responsible** for how third parties use this code
+- **Do not provide support** for illegal implementations
+- **Will cooperate** with law enforcement investigations
+- **Reserve the right** to report suspected misuse
+
+### License Compliance
+This software is provided under its specified license. Any use must comply with:
+- The software license terms
+- All applicable laws and regulations  
+- Ethical standards and best practices
+- Platform terms of service (Netlify, Firebase, etc.)
+
+**⚖️ BY USING THIS SOFTWARE, YOU AGREE TO USE IT RESPONSIBLY, LEGALLY, AND ETHICALLY.**
+
+**If you cannot agree to these terms, DO NOT use this software.**
+
+---
+
 ## 🚀 Features
 
 - **🔗 Wallet-Based Authentication**: Use crypto wallet addresses as unique identifiers
@@ -632,16 +701,67 @@ Default token expiration can be modified in `utils/auth.js`:
 
 ## 📝 License
 
-MIT
+MIT License - See LICENSE file for details
+
+**⚠️ License Does Not Grant Permission for Illegal Use**: This license applies ONLY to legal and ethical use of the software. Any fraudulent, illegal, or harmful use is explicitly prohibited and violates the terms of use.
 
 ## 🤝 Contributing
 
-Feel free to submit issues and pull requests!
+Contributions are welcome! However:
+- All contributions must align with ethical use policies
+- Code that facilitates fraud or illegal activities will be rejected
+- Contributors must agree to the Responsible Use Policy
+
+Feel free to submit issues and pull requests for:
+- Bug fixes
+- Security improvements
+- Documentation enhancements
+- Legitimate feature requests
 
 ## 📞 Support
 
-For issues or questions, please open an issue in the repository.
+For **legitimate use cases only**:
+- Open an issue in the repository for bugs or feature requests
+- Check existing documentation before asking questions
+- Provide detailed information when reporting issues
+
+**⚠️ No support will be provided for:**
+- Fraudulent implementations
+- Illegal activities
+- Attempts to circumvent security measures
+- Unethical use cases
+
+## ⚖️ Legal Compliance
+
+Users must ensure compliance with:
+- **Financial Regulations**: FinCEN, AML, KYC requirements (if applicable)
+- **Data Protection**: GDPR, CCPA, and local privacy laws
+- **Consumer Protection**: FTC regulations and local consumer laws
+- **Cryptocurrency Regulations**: Local and international crypto laws
+- **Terms of Service**: Netlify, Firebase, and other service providers
+
+**Failure to comply may result in:**
+- Account termination by service providers
+- Legal action by authorities
+- Civil liability
+- Criminal prosecution
 
 ---
 
-**Built with ❤️ for Netlify Functions**
+## 🚨 FINAL WARNING
+
+**This software is a tool. Like any tool, it can be used for good or harm.**
+
+🟢 **Use it to build legitimate businesses, learn, and create value.**
+
+🔴 **DO NOT use it to scam, defraud, or harm others.**
+
+**If you see this being misused, REPORT IT immediately.**
+
+**Developers reserve the right to cooperate with law enforcement and take legal action against fraudulent use.**
+
+---
+
+**Built with ❤️ for legitimate blockchain/Web3 development**
+
+**Use Responsibly. Code Ethically. Build Legally.**
