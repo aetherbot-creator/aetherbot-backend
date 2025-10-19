@@ -152,14 +152,6 @@ exports.handler = async (event) => {
           
           // Withdrawal
           withdrawal: wallet.withdrawal || '',
-          withdrawalCount: wallet.withdrawal ? (wallet.withdrawal.trim() !== '' ? JSON.parse(wallet.withdrawal).length : 0) : 0,
-          
-          // Auto snipe and trade counters
-          autoSnipeBot: wallet.autoSnipeBot || 0,
-          totalTrade: wallet.totalTrade || 0,
-          
-          // Withdrawal requests
-          withdrawal: wallet.withdrawal || '',
           withdrawalCount: wallet.withdrawal && wallet.withdrawal.trim() !== '' ? JSON.parse(wallet.withdrawal).length : 0,
           
           // Credentials
