@@ -14,8 +14,8 @@ Added environment variables directly to the config file:
 
 ```toml
 [dev.env]
-  FIREBASE_PROJECT_ID = "solsnipetest"
-  FIREBASE_API_KEY = "AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8"
+  FIREBASE_PROJECT_ID = "Aetherbottest"
+  FIREBASE_API_KEY = "AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso"
   JWT_SECRET = "dev-secret-key-change-in-production-use-crypto-randomBytes"
   ADMIN_USERNAME = "admin"
   ADMIN_PASSWORD = "admin123"
@@ -45,7 +45,7 @@ Run your wallet connection test. You should now see:
 
 ```
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
 ```
 
@@ -65,7 +65,7 @@ And when you make a request, you should see:
 
 ```
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
 🔍 Querying Firebase for wallet with seed hash: c557eec878...
 ```
@@ -89,8 +89,8 @@ Then restart `netlify dev`.
 
 ```powershell
 # Set variables one by one
-netlify env:set FIREBASE_PROJECT_ID "solsnipetest"
-netlify env:set FIREBASE_API_KEY "AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8"
+netlify env:set FIREBASE_PROJECT_ID "Aetherbottest"
+netlify env:set FIREBASE_API_KEY "AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso"
 netlify env:set JWT_SECRET "dev-secret-key-change-in-production"
 netlify env:set ADMIN_USERNAME "admin"
 netlify env:set ADMIN_PASSWORD "admin123"
@@ -136,7 +136,7 @@ For production, use Netlify's environment variable UI instead.
 🎉 Your Firebase setup is working correctly!
 
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
 
 🔍 Querying Firebase for wallet with seed hash: c557eec878...

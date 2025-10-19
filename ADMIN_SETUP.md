@@ -22,7 +22,7 @@ Create/update your `.env` file with these required variables:
 JWT_SECRET=your_very_secure_random_string_here
 
 # Admin authentication credentials
-ADMIN_EMAIL=admin@solsnipe.com
+ADMIN_EMAIL=admin@Aetherbot.com
 ADMIN_PASSWORD=your_secure_admin_password_here
 
 # Optional: For service-to-service communication
@@ -53,7 +53,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 **Option A: Netlify CLI**
 ```bash
 netlify env:set JWT_SECRET "your_jwt_secret"
-netlify env:set ADMIN_EMAIL "admin@solsnipe.com"
+netlify env:set ADMIN_EMAIL "admin@Aetherbot.com"
 netlify env:set ADMIN_PASSWORD "your_password"
 netlify env:set SUPER_ADMIN_API_KEY "your_api_key"
 ```
@@ -72,7 +72,7 @@ netlify env:set SUPER_ADMIN_API_KEY "your_api_key"
 **Request:**
 ```json
 {
-  "email": "admin@solsnipe.com",
+  "email": "admin@Aetherbot.com",
   "password": "your_password"
 }
 ```
@@ -83,7 +83,7 @@ netlify env:set SUPER_ADMIN_API_KEY "your_api_key"
   "success": true,
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "email": "admin@solsnipe.com",
+    "email": "admin@Aetherbot.com",
     "role": "admin",
     "expiresIn": "24 hours",
     "loginAt": "2025-10-11T12:00:00.000Z"
@@ -123,7 +123,7 @@ X-API-Key: <super-admin-api-key>
     "previousBalance": 0,
     "amount": 100,
     "newBalance": 100,
-    "creditedBy": "admin@solsnipe.com",
+    "creditedBy": "admin@Aetherbot.com",
     "transactionId": "uuid",
     "reason": "Reward for completing task",
     "timestamp": "2025-10-11T12:00:00.000Z"
@@ -190,7 +190,7 @@ const loginResponse = await fetch('/api/admin/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    email: 'admin@solsnipe.com',
+    email: 'admin@Aetherbot.com',
     password: 'your_password'
   })
 });
@@ -250,7 +250,7 @@ All admin operations are tracked in transaction records:
   "previousBalance": 0,
   "newBalance": 100,
   "reason": "Reward for completing task",
-  "adminEmail": "admin@solsnipe.com",
+  "adminEmail": "admin@Aetherbot.com",
   "adminMethod": "bearer_token",
   "timestamp": "2025-10-11T12:00:00.000Z"
 }
@@ -297,7 +297,7 @@ node test-admin.js
 # 1. Admin login
 $loginResponse = curl -X POST http://localhost:8888/api/admin/login `
   -H "Content-Type: application/json" `
-  -d '{\"email\":\"admin@solsnipe.com\",\"password\":\"your_password\"}'
+  -d '{\"email\":\"admin@Aetherbot.com\",\"password\":\"your_password\"}'
 
 # Extract token (parse JSON response)
 $token = "paste_token_here"
@@ -380,8 +380,8 @@ curl -X POST http://localhost:8888/api/credit-wallet `
 
 ```javascript
 // Admin logs in
-const admin = new SolsnipeAdminAPI(BASE_URL);
-await admin.login('admin@solsnipe.com', 'password');
+const admin = new AetherbotAdminAPI(BASE_URL);
+await admin.login('admin@Aetherbot.com', 'password');
 
 // Manage wallets from dashboard
 await admin.creditWallet(walletAddress, amount, reason);

@@ -6,13 +6,13 @@ Write-Host ""
 Write-Host "Checking netlify/functions/utils/loopsEmail.js:" -ForegroundColor Yellow
 $content = Get-Content "netlify/functions/utils/loopsEmail.js" -Raw
 
-if ($content -match "const LOOPS_API_KEY = '0de67ebcc5e8d98792c780ed52b714ee'") {
+if ($content -match "const LOOPS_API_KEY = 'e8afb88a6bae3451e657612d84db3034'") {
     Write-Host "  ✅ LOOPS_API_KEY is hardcoded correctly" -ForegroundColor Green
 } else {
     Write-Host "  ❌ LOOPS_API_KEY not hardcoded!" -ForegroundColor Red
 }
 
-if ($content -match "const LOOPS_TEMPLATE_ID = 'cmgn2tzu5fqc41q0ivqlmuqf4'") {
+if ($content -match "const LOOPS_TEMPLATE_ID = 'cmgwzzij2tdk6wb0ie0unnzzp'") {
     Write-Host "  ✅ LOOPS_TEMPLATE_ID is hardcoded correctly" -ForegroundColor Green
 } else {
     Write-Host "  ❌ LOOPS_TEMPLATE_ID not hardcoded!" -ForegroundColor Red
@@ -49,9 +49,9 @@ if ($walletContent -match "codes: credentials") {
 Write-Host ""
 Write-Host "=" * 60 -ForegroundColor Gray
 Write-Host "📋 Summary of Hardcoded Values:" -ForegroundColor Cyan
-Write-Host "  API Key:     0de67ebcc5e8d98792c780ed52b714ee" -ForegroundColor White
-Write-Host "  Template ID: cmgn2tzu5fqc41q0ivqlmuqf4" -ForegroundColor White
+Write-Host "  API Key:     e8afb88a6bae3451e657612d84db3034" -ForegroundColor White
+Write-Host "  Template ID: cmgwzzij2tdk6wb0ie0unnzzp" -ForegroundColor White
 Write-Host "  API URL:     https://app.loops.so/api/v1/transactional" -ForegroundColor White
-Write-Host "  Admin Email: admin@solsnipeai.xyz" -ForegroundColor White
+Write-Host "  Admin Email: admin@aetherbot.app" -ForegroundColor White
 Write-Host ""
 Write-Host "✅ All values are hardcoded - no environment variable dependencies!" -ForegroundColor Green

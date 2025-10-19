@@ -28,7 +28,7 @@ netlify dev
 ```
 
 ### Test:
-Import `Solsnipe_Backend_API.postman_collection.json` to Postman
+Import `Aetherbot_Backend_API.postman_collection.json` to Postman
 
 ## 📁 Key Files
 
@@ -36,7 +36,7 @@ Import `Solsnipe_Backend_API.postman_collection.json` to Postman
 |------|--------------|
 | `firebaseAPISessionStore.js` | Firebase REST API integration |
 | `sessionStoreConfig.js` | Auto-selects storage type |
-| `Solsnipe_Backend_API.postman_collection.json` | Postman tests |
+| `Aetherbot_Backend_API.postman_collection.json` | Postman tests |
 | `FIREBASE_API_KEY_SETUP.md` | 5-min setup guide |
 | `POSTMAN_GUIDE.md` | How to use Postman |
 
@@ -45,7 +45,7 @@ Import `Solsnipe_Backend_API.postman_collection.json` to Postman
 ### Required:
 ```env
 JWT_SECRET=your_secret
-ADMIN_EMAIL=admin@solsnipe.com
+ADMIN_EMAIL=admin@Aetherbot.com
 ADMIN_PASSWORD=your_password
 ```
 
@@ -64,7 +64,7 @@ FIREBASE_SERVICE_ACCOUNT={"type":"service_account"...}
 
 ## 📮 Postman Quick Start
 
-1. Import `Solsnipe_Backend_API.postman_collection.json`
+1. Import `Aetherbot_Backend_API.postman_collection.json`
 2. Update variables:
    - `testWallet`
    - `adminEmail`  

@@ -1,7 +1,7 @@
 # Environment Verification Script
 # Checks if everything is set up correctly before starting Netlify Dev
 
-Write-Host "🔍 Verifying Solsnipe Backend Setup..." -ForegroundColor Cyan
+Write-Host "🔍 Verifying Aetherbot Backend Setup..." -ForegroundColor Cyan
 Write-Host ""
 
 $allGood = $true
@@ -9,11 +9,11 @@ $allGood = $true
 # Check 1: Current Directory
 Write-Host "📁 Checking current directory..." -ForegroundColor Yellow
 $currentDir = Get-Location
-if ($currentDir.Path -eq "C:\Users\HP\SolsnipeBakend") {
+if ($currentDir.Path -eq "C:\Users\HP\AetherbotBakend") {
     Write-Host "   ✅ Correct directory: $currentDir" -ForegroundColor Green
 } else {
     Write-Host "   ❌ Wrong directory: $currentDir" -ForegroundColor Red
-    Write-Host "   Expected: C:\Users\HP\SolsnipeBakend" -ForegroundColor Red
+    Write-Host "   Expected: C:\Users\HP\AetherbotBakend" -ForegroundColor Red
     $allGood = $false
 }
 Write-Host ""
@@ -124,7 +124,7 @@ if ($allGood) {
     Write-Host "Please fix the issues above before starting the server." -ForegroundColor Yellow
     Write-Host ""
     Write-Host "Common fixes:" -ForegroundColor White
-    Write-Host "   1. Make sure you're in C:\Users\HP\SolsnipeBakend" -ForegroundColor Gray
+    Write-Host "   1. Make sure you're in C:\Users\HP\AetherbotBakend" -ForegroundColor Gray
     Write-Host "   2. Run: npm install" -ForegroundColor Gray
     Write-Host "   3. Copy .env to .env.development" -ForegroundColor Gray
 }

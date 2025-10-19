@@ -194,7 +194,7 @@ const verifyAdminToken = (token) => {
  * @returns {boolean} Whether credentials are valid
  */
 const validateAdminCredentials = (email, password) => {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@solsnipe.com';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@Aetherbot.com';
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
   
   return email === adminEmail && password === adminPassword;

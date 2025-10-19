@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "Solsnipe Backend API",
-    "description": "Complete API collection for Solsnipe wallet-based authentication and balance management system with admin controls",
+    "name": "Aetherbot Backend API",
+    "description": "Complete API collection for Aetherbot wallet-based authentication and balance management system with admin controls",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "solsnipe-backend-api-v1",
+    "_postman_id": "Aetherbot-backend-api-v1",
     "version": "1.0.0"
   },
   "auth": {
@@ -49,7 +49,7 @@
     },
     {
       "key": "adminEmail",
-      "value": "admin@solsnipe.com",
+      "value": "admin@Aetherbot.com",
       "type": "string"
     },
     {

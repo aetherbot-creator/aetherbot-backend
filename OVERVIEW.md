@@ -1,4 +1,4 @@
-# 🎯 Solsnipe Backend - System Overview
+# 🎯 Aetherbot Backend - System Overview
 
 ## What You Have
 
@@ -35,7 +35,7 @@ Instead of traditional email/password:
 ## 📁 File Structure
 
 ```
-SolsnipeBakend/
+AetherbotBakend/
 ├── netlify/functions/          # All API endpoints
 │   ├── utils/
 │   │   ├── auth.js            # JWT & wallet validation

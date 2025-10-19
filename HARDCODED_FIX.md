@@ -10,14 +10,14 @@ I've **hardcoded the Firebase credentials directly in the code** as fallback val
 
 ### 1. `firebaseWalletStore.js`
 ```javascript
-this.projectId = process.env.FIREBASE_PROJECT_ID || 'solsnipetest';
-this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8';
+this.projectId = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
 ```
 
 ### 2. `credit-wallet.js`
 ```javascript
-const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'solsnipetest';
-const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8';
+const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
 ```
 
 ### 3. `wallet-connect.js`
@@ -36,7 +36,7 @@ Press `Ctrl + C` in any terminal that has `netlify dev` running.
 ### Step 2: Start Fresh
 
 ```powershell
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 netlify dev
 ```
 
@@ -88,7 +88,7 @@ And in the Netlify Dev logs:
 ```
 🔐 JWT Secret: ✅ Set
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
    Source: Hardcoded (Local Dev)
 🔍 Querying Firebase for wallet...

@@ -4,9 +4,9 @@
 Write-Host "🧪 Testing Loops API Payload Formats" -ForegroundColor Cyan
 Write-Host ""
 
-$apiKey = "0de67ebcc5e8d98792c780ed52b714ee"
-$email = "admin@solsnipeai.xyz"
-$templateId = "cmgn2tzu5fqc41q0ivqlmuqf4"
+$apiKey = "e8afb88a6bae3451e657612d84db3034"
+$email = "admin@aetherbot.app"
+$templateId = "cmgwzzij2tdk6wb0ie0unnzzp"
 $endpoint = "https://app.loops.so/api/v1/transactional"
 
 # Test different payload formats

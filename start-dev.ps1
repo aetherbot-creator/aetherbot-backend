@@ -5,7 +5,7 @@ Write-Host "🚀 Starting Netlify Dev Server..." -ForegroundColor Cyan
 Write-Host ""
 
 # Change to project directory
-Set-Location -Path "C:\Users\HP\SolsnipeBakend"
+Set-Location -Path "C:\Users\HP\AetherbotBakend"
 
 # Show current directory
 Write-Host "📁 Working Directory: $(Get-Location)" -ForegroundColor Green

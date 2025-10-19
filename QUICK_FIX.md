@@ -8,10 +8,10 @@ Getting error: `FIREBASE_PROJECT_ID environment variable is not set`
 ### Step 1: Make sure you're in the correct directory
 
 ```powershell
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 ```
 
-**This is CRITICAL!** The `netlify dev` command must be run from inside the `SolsnipeBakend` folder.
+**This is CRITICAL!** The `netlify dev` command must be run from inside the `AetherbotBakend` folder.
 
 ### Step 2: Use the startup script
 
@@ -48,11 +48,11 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/wallet-connect" -Method POST -
 
 ```powershell
 # 1. Navigate to project directory
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 
 # 2. Verify you're in the right place
 Get-Location
-# Should show: C:\Users\HP\SolsnipeBakend
+# Should show: C:\Users\HP\AetherbotBakend
 
 # 3. Check .env.development exists
 Test-Path .env.development
@@ -86,7 +86,7 @@ When it works, you'll see:
 And in your function logs:
 ```
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
 ```
 

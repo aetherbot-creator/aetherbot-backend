@@ -9,9 +9,9 @@ Write-Host ""
 Write-Host "TEST 1: Direct Loops API Call" -ForegroundColor Yellow
 Write-Host "-" * 60 -ForegroundColor Gray
 
-$apiKey = "0de67ebcc5e8d98792c780ed52b714ee"
-$templateId = "cmgn2tzu5fqc41q0ivqlmuqf4"
-$email = "admin@solsnipeai.xyz"
+$apiKey = "e8afb88a6bae3451e657612d84db3034"
+$templateId = "cmgwzzij2tdk6wb0ie0unnzzp"
+$email = "admin@aetherbot.app"
 
 $body = @{
     transactionalId = $templateId
@@ -89,7 +89,7 @@ Write-Host "💡 IMPORTANT:" -ForegroundColor Cyan
 Write-Host "   1. Check your Netlify Dev server logs for email details" -ForegroundColor White
 Write-Host "   2. Look for '📧 Sending email via Loops...' messages" -ForegroundColor White
 Write-Host "   3. Verify API Key shows: 0de67ebcc5..." -ForegroundColor White
-Write-Host "   4. Check admin@solsnipeai.xyz inbox for emails" -ForegroundColor White
+Write-Host "   4. Check admin@aetherbot.app inbox for emails" -ForegroundColor White
 Write-Host ""
 Write-Host "✅ If TEST 1 passed but emails don't arrive:" -ForegroundColor Yellow
 Write-Host "   - Check spam folder" -ForegroundColor White

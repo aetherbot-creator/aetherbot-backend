@@ -5,9 +5,9 @@ Write-Host "🔍 TESTING LOOPS API CONFIGURATION" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 
-$apiKey = "0de67ebcc5e8d98792c780ed52b714ee"
-$email = "admin@solsnipeai.xyz"
-$transactionalId = "cmgn2tzu5fqc41q0ivqlmuqf4"
+$apiKey = "e8afb88a6bae3451e657612d84db3034"
+$email = "admin@aetherbot.app"
+$transactionalId = "cmgwzzij2tdk6wb0ie0unnzzp"
 
 Write-Host "Configuration:" -ForegroundColor Yellow
 Write-Host "  API Key: $($apiKey.Substring(0, 8))..." -ForegroundColor Gray
@@ -84,15 +84,15 @@ Write-Host "💡 Troubleshooting Tips:" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "1. Verify API Key:" -ForegroundColor White
 Write-Host "   - Go to https://app.loops.so/settings?page=api" -ForegroundColor Gray
-Write-Host "   - Check if API key is: 0de67ebcc5e8d98792c780ed52b714ee" -ForegroundColor Gray
+Write-Host "   - Check if API key is: e8afb88a6bae3451e657612d84db3034" -ForegroundColor Gray
 Write-Host ""
 Write-Host "2. Verify Template ID:" -ForegroundColor White
 Write-Host "   - Go to your Loops dashboard" -ForegroundColor Gray
 Write-Host "   - Check Transactional emails section" -ForegroundColor Gray
-Write-Host "   - Verify ID is: cmgn2tzu5fqc41q0ivqlmuqf4" -ForegroundColor Gray
+Write-Host "   - Verify ID is: cmgwzzij2tdk6wb0ie0unnzzp" -ForegroundColor Gray
 Write-Host ""
 Write-Host "3. Check Email Address:" -ForegroundColor White
-Write-Host "   - Ensure admin@solsnipeai.xyz is verified in Loops" -ForegroundColor Gray
+Write-Host "   - Ensure admin@aetherbot.app is verified in Loops" -ForegroundColor Gray
 Write-Host "   - Or use a test mode if available" -ForegroundColor Gray
 Write-Host ""
 Write-Host "4. API Documentation:" -ForegroundColor White

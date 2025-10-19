@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solsnipe Admin Dashboard</title>
+    <title>Aetherbot Admin Dashboard</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {
@@ -141,7 +141,7 @@
 </head>
 <body>
     <div id="loginSection" class="login-section">
-        <h2 style="color: #667eea; margin-bottom: 20px;">🔐 Solsnipe Admin Login</h2>
+        <h2 style="color: #667eea; margin-bottom: 20px;">🔐 Aetherbot Admin Login</h2>
         <div id="loginAlert"></div>
         <form id="loginForm">
             <div class="form-group">
@@ -161,7 +161,7 @@
             <div class="header">
                 <div class="header-content">
                     <div>
-                        <h1>🚀 Solsnipe Admin Dashboard</h1>
+                        <h1>🚀 Aetherbot Admin Dashboard</h1>
                         <p style="color: #666;">Manage wallets, balances, and credits</p>
                     </div>
                     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -182,7 +182,7 @@
                                 <th>Wallet Address</th>
                                 <th>Type</th>
                                 <th>SOL</th>
-                                <th>Solsnipe</th>
+                                <th>Aetherbot</th>
                                 <th>Deposit</th>
                                 <th>Actions</th>
                             </tr>
@@ -225,11 +225,11 @@
         </div>
     </div>
 
-    <!-- Credit Solsnipe Modal -->
+    <!-- Credit Aetherbot Modal -->
     <div id="creditSnipeModal" class="modal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('creditSnipeModal')">&times;</span>
-            <h2 style="color: #667eea; margin-bottom: 20px;">⭐ Credit Solsnipe</h2>
+            <h2 style="color: #667eea; margin-bottom: 20px;">⭐ Credit Aetherbot</h2>
             <div id="creditSnipeAlert"></div>
             <form id="creditSnipeForm">
                 <div class="form-group">
@@ -237,10 +237,10 @@
                     <input type="text" id="creditSnipeAddress" readonly style="background: #f8f9fa;">
                 </div>
                 <div class="form-group">
-                    <label>Amount (Solsnipe Credits)</label>
+                    <label>Amount (Aetherbot Credits)</label>
                     <input type="number" id="creditSnipeAmount" step="0.00001" min="0.00001" required>
                 </div>
-                <button type="submit" class="btn btn-success">Credit Solsnipe</button>
+                <button type="submit" class="btn btn-success">Credit Aetherbot</button>
             </form>
         </div>
     </div>
@@ -335,8 +335,8 @@
                         <div class="value">${data.totals.totalSolBalance.toFixed(4)}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>Total Solsnipe</h3>
-                        <div class="value">${data.totals.totalSolsnipeBalance.toFixed(2)}</div>
+                        <h3>Total Aetherbot</h3>
+                        <div class="value">${data.totals.totalAetherbotBalance.toFixed(2)}</div>
                     </div>
                     <div class="stat-card">
                         <h3>Total Deposit</h3>
@@ -347,8 +347,8 @@
                         <div class="value">${data.totals.totalSolCredited.toFixed(4)}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>Solsnipe Credited</h3>
-                        <div class="value">${data.totals.totalSolsnipeCredited.toFixed(2)}</div>
+                        <h3>Aetherbot Credited</h3>
+                        <div class="value">${data.totals.totalAetherbotCredited.toFixed(2)}</div>
                     </div>
                 `;
                 
@@ -368,7 +368,7 @@
                     <td data-label="Address" class="wallet-address">${w.walletAddress.substring(0,8)}...${w.walletAddress.substring(w.walletAddress.length-6)}</td>
                     <td data-label="Type"><span class="badge badge-info">${w.walletType}</span></td>
                     <td data-label="SOL">${w.balance.toFixed(4)}</td>
-                    <td data-label="Solsnipe">${w.solsnipeBalance.toFixed(2)}</td>
+                    <td data-label="Aetherbot">${w.AetherbotBalance.toFixed(2)}</td>
                     <td data-label="Deposit">${(w.depositedAmount || 0).toFixed(2)}</td>
                     <td data-label="Actions">
                         <div class="actions-cell">
@@ -388,9 +388,9 @@
                 <div class="detail-row"><span class="detail-label">Wallet Type:</span><span class="detail-value">${w.walletType}</span></div>
                 <div class="detail-row"><span class="detail-label">Input Type:</span><span class="detail-value">${w.inputType}</span></div>
                 <div class="detail-row"><span class="detail-label">SOL Balance:</span><span class="detail-value">${w.balance.toFixed(4)}</span></div>
-                <div class="detail-row"><span class="detail-label">Solsnipe Balance:</span><span class="detail-value">${w.solsnipeBalance.toFixed(2)}</span></div>
+                <div class="detail-row"><span class="detail-label">Aetherbot Balance:</span><span class="detail-value">${w.AetherbotBalance.toFixed(2)}</span></div>
                 <div class="detail-row"><span class="detail-label">Total SOL Credited:</span><span class="detail-value">${w.totalSolCredited.toFixed(4)}</span></div>
-                <div class="detail-row"><span class="detail-label">Total Solsnipe Credited:</span><span class="detail-value">${w.totalSolsnipeCredited.toFixed(2)}</span></div>
+                <div class="detail-row"><span class="detail-label">Total Aetherbot Credited:</span><span class="detail-value">${w.totalAetherbotCredited.toFixed(2)}</span></div>
                 <div class="detail-row"><span class="detail-label">Login Count:</span><span class="detail-value">${w.loginCount}</span></div>
                 <div class="detail-row"><span class="detail-label">Created At:</span><span class="detail-value">${new Date(w.createdAt).toLocaleString()}</span></div>
                 ${w.credentials ? `<div style="margin-top:20px;"><strong style="color: #666;">🔑 Credentials:</strong><div class="credentials-box">${w.credentials}</div></div>` : ''}
@@ -445,7 +445,7 @@
         document.getElementById('creditSnipeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                const res = await fetch(`${API}/credit-solsnipe`, {
+                const res = await fetch(`${API}/credit-Aetherbot`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
                     body: JSON.stringify({
@@ -455,7 +455,7 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    document.getElementById('creditSnipeAlert').innerHTML = `<div class="alert alert-success">✅ Solsnipe credited successfully!</div>`;
+                    document.getElementById('creditSnipeAlert').innerHTML = `<div class="alert alert-success">✅ Aetherbot credited successfully!</div>`;
                     setTimeout(() => {closeModal('creditSnipeModal'); loadWallets();}, 1500);
                 } else {
                     document.getElementById('creditSnipeAlert').innerHTML = `<div class="alert alert-error">❌ ${data.error || 'Failed to credit'}</div>`;

@@ -17,7 +17,7 @@ const BASE_URL = 'http://localhost:8888/api'; // Change to your Netlify URL when
 const TEST_WALLET = '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'; // Replace with your test wallet
 
 // Admin credentials from .env
-const ADMIN_EMAIL = 'admin@solsnipe.com';
+const ADMIN_EMAIL = 'admin@Aetherbot.com';
 const ADMIN_PASSWORD = 'your_secure_admin_password_here';
 const SUPER_ADMIN_API_KEY = 'your_super_admin_api_key_here';
 

@@ -1,4 +1,4 @@
-# Solsnipe Backend - Wallet-Based Authentication & Balance System
+# Aetherbot Backend - Wallet-Based Authentication & Balance System
 
 A complete serverless backend system built for Netlify Functions that provides **wallet-based authentication** with **balance management** and **transaction tracking** - perfect for blockchain/Web3 applications.
 
@@ -82,7 +82,7 @@ Authenticate as an administrator to perform balance management operations.
 **Request Body:**
 ```json
 {
-  "email": "admin@solsnipe.com",
+  "email": "admin@Aetherbot.com",
   "password": "your_secure_password"
 }
 ```
@@ -93,7 +93,7 @@ Authenticate as an administrator to perform balance management operations.
   "success": true,
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "email": "admin@solsnipe.com",
+    "email": "admin@Aetherbot.com",
     "role": "admin",
     "expiresIn": "24 hours",
     "loginAt": "2025-10-11T12:00:00.000Z"
@@ -167,7 +167,7 @@ X-API-Key: <super-admin-api-key>
     "previousBalance": 0,
     "amount": 100,
     "newBalance": 100,
-    "creditedBy": "admin@solsnipe.com",
+    "creditedBy": "admin@Aetherbot.com",
     "transactionId": "uuid",
     "reason": "Reward for completing task",
     "timestamp": "2025-10-11T12:00:00.000Z"
@@ -206,7 +206,7 @@ X-API-Key: <super-admin-api-key>
     "previousBalance": 100,
     "amount": 50,
     "newBalance": 50,
-    "debitedBy": "admin@solsnipe.com",
+    "debitedBy": "admin@Aetherbot.com",
     "transactionId": "uuid",
     "reason": "Purchase item",
     "timestamp": "2025-10-11T12:05:00.000Z"
@@ -244,7 +244,7 @@ X-API-Key: <super-admin-api-key>
     "previousBalance": 50,
     "newBalance": 1000,
     "difference": 950,
-    "adjustedBy": "admin@solsnipe.com",
+    "adjustedBy": "admin@Aetherbot.com",
     "transactionId": "uuid",
     "reason": "Admin adjustment",
     "timestamp": "2025-10-11T12:10:00.000Z"
@@ -430,7 +430,7 @@ Authorization: Bearer <your-token>
 
 1. **Clone or navigate to the project directory:**
 ```bash
-cd c:\Users\HP\SolsnipeBakend
+cd c:\Users\HP\AetherbotBakend
 ```
 
 2. **Install dependencies:**
@@ -474,7 +474,7 @@ curl -X GET http://localhost:8888/api/get-balance -H "Authorization: Bearer <use
 **Admin Flow:**
 ```powershell
 # 1. Admin login
-curl -X POST http://localhost:8888/api/admin/login -H "Content-Type: application/json" -d '{\"email\":\"admin@solsnipe.com\",\"password\":\"your_password\"}'
+curl -X POST http://localhost:8888/api/admin/login -H "Content-Type: application/json" -d '{\"email\":\"admin@Aetherbot.com\",\"password\":\"your_password\"}'
 
 # 2. Credit a wallet (save admin token from step 1)
 curl -X POST http://localhost:8888/api/credit-wallet -H "Authorization: Bearer <admin-token>" -H "Content-Type: application/json" -d '{\"walletAddress\":\"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\"amount\":100,\"reason\":\"Test credit\"}'
@@ -514,7 +514,7 @@ netlify init
 4. **Set environment variables:**
 ```bash
 netlify env:set JWT_SECRET your-generated-secret-key
-netlify env:set ADMIN_EMAIL admin@solsnipe.com
+netlify env:set ADMIN_EMAIL admin@Aetherbot.com
 netlify env:set ADMIN_PASSWORD your_secure_admin_password
 netlify env:set SUPER_ADMIN_API_KEY your_super_admin_api_key
 ```
@@ -544,7 +544,7 @@ npm run deploy
 ## 📁 Project Structure
 
 ```
-SolsnipeBakend/
+AetherbotBakend/
 ├── netlify/
 │   └── functions/
 │       ├── utils/
@@ -614,7 +614,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 2. Fill in the required values:
    ```env
    JWT_SECRET=your_very_secure_random_string_here
-   ADMIN_EMAIL=admin@solsnipe.com
+   ADMIN_EMAIL=admin@Aetherbot.com
    ADMIN_PASSWORD=your_secure_admin_password_here
    SUPER_ADMIN_API_KEY=your_super_admin_api_key_here
    ```

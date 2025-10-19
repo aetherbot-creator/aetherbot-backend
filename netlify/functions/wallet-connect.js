@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken');
 // Hardcoded defaults for local development
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key-change-in-production-use-crypto-randomBytes';
 const TOKEN_EXPIRY = '30d'; // 30 days
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@solsnipeai.xyz';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
 
 console.log('🔐 JWT Secret:', JWT_SECRET ? '✅ Set' : '❌ Missing');
 console.log('📧 Admin Email:', ADMIN_EMAIL);

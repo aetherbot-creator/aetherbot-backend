@@ -22,11 +22,11 @@ The endpoint might have changed. Loops uses different endpoints:
 - Check: https://app.loops.so/settings?page=api
 
 ### 3. **Invalid Template ID**
-- Template ID might not exist: `cmgn2tzu5fqc41q0ivqlmuqf4`
+- Template ID might not exist: `cmgwzzij2tdk6wb0ie0unnzzp`
 - Template might not be published
 
 ### 4. **Email Not Verified**
-- `admin@solsnipeai.xyz` might not be verified in Loops
+- `admin@aetherbot.app` might not be verified in Loops
 - Loops may require verified sender/recipient
 
 ---
@@ -49,7 +49,7 @@ This will:
 
 1. Go to: https://app.loops.so/
 2. Navigate to **Settings → API**
-3. Verify your API key matches: `0de67ebcc5e8d98792c780ed52b714ee`
+3. Verify your API key matches: `e8afb88a6bae3451e657612d84db3034`
 4. Check if the key has the correct permissions
 
 ### Step 3: Verify Template
@@ -90,7 +90,7 @@ LOOPS_API_KEY=your_actual_api_key_here
 LOOPS_WALLET_CONNECTION_TEMPLATE_ID=your_actual_template_id_here
 
 # Verify this email in Loops
-ADMIN_EMAIL=admin@solsnipeai.xyz
+ADMIN_EMAIL=admin@aetherbot.app
 ```
 
 ### Solution 3: Use Alternative Email Service (Temporary)
@@ -153,7 +153,7 @@ Check server logs for:
 ```
 📧 Sending email via Loops...
    API URL: https://app.loops.so/api/v1/transactional
-   To: admin@solsnipeai.xyz
+   To: admin@aetherbot.app
    Response status: 200
 ✅ Email sent successfully
 ```

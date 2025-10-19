@@ -41,7 +41,7 @@ Each document is keyed by wallet address (lowercase):
       previousBalance: 0,
       newBalance: 100,
       reason: "Reward",
-      adminEmail: "admin@solsnipe.com",
+      adminEmail: "admin@Aetherbot.com",
       adminMethod: "bearer_token",
       timestamp: "2025-10-11T12:00:00.000Z"
     },
@@ -52,7 +52,7 @@ Each document is keyed by wallet address (lowercase):
       previousBalance: 100,
       newBalance: 50,
       reason: "Purchase",
-      adminEmail: "admin@solsnipe.com",
+      adminEmail: "admin@Aetherbot.com",
       adminMethod: "api_key",
       timestamp: "2025-10-11T12:05:00.000Z"
     }
@@ -61,7 +61,7 @@ Each document is keyed by wallet address (lowercase):
   createdAt: Timestamp,
   lastAccessedAt: Timestamp,
   lastAdjustment: {
-    by: "admin@solsnipe.com",
+    by: "admin@Aetherbot.com",
     at: "2025-10-11T12:10:00.000Z",
     reason: "Balance correction"
   }
@@ -74,7 +74,7 @@ Each document is keyed by wallet address (lowercase):
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Add project"
-3. Enter project name (e.g., "solsnipe-backend")
+3. Enter project name (e.g., "Aetherbot-backend")
 4. Disable Google Analytics (optional)
 5. Click "Create project"
 
@@ -103,14 +103,14 @@ Create `.env` file in project root:
 ```env
 # Copy the entire contents of the service account JSON file
 # Remove all line breaks and make it a single line
-FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"solsnipe-backend-abc123","private_key_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"firebase-adminsdk-xyz@solsnipe-backend-abc123.iam.gserviceaccount.com",...}
+FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"Aetherbot-backend-abc123","private_key_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"firebase-adminsdk-xyz@Aetherbot-backend-abc123.iam.gserviceaccount.com",...}
 
 # Enable Firebase storage
 USE_FIREBASE=true
 
 # Other existing env vars
 JWT_SECRET=your_jwt_secret
-ADMIN_EMAIL=admin@solsnipe.com
+ADMIN_EMAIL=admin@Aetherbot.com
 ADMIN_PASSWORD=your_password
 ```
 

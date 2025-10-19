@@ -1,5 +1,5 @@
 {
-  "name": "solsnipe-backend",
+  "name": "Aetherbot-backend",
   "version": "1.0.0",
   "description": "Anonymous authentication backend system for Netlify Functions",
   "main": "index.js",

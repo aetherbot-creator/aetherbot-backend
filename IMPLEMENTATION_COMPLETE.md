@@ -26,7 +26,7 @@
 ### Documentation:
 5. **`FIREBASE_API_KEY_SETUP.md`** - 5-minute setup guide
 6. **`POSTMAN_GUIDE.md`** - Complete Postman usage guide
-7. **`Solsnipe_Backend_API.postman_collection.json`** - Postman collection
+7. **`Aetherbot_Backend_API.postman_collection.json`** - Postman collection
 
 ## 🔑 Two Ways to Use Firebase
 
@@ -94,7 +94,7 @@ Look for:
 ### 4. Import Postman Collection
 
 1. Open Postman
-2. Import `Solsnipe_Backend_API.postman_collection.json`
+2. Import `Aetherbot_Backend_API.postman_collection.json`
 3. Update variables:
    - `testWallet`
    - `adminEmail`
@@ -144,7 +144,7 @@ Document: 0x742d35cc6634c0532925a3b844bc9e7595f0beb
       previousBalance: 500,
       newBalance: 1000,
       reason: "Admin reward",
-      adminEmail: "admin@solsnipe.com",  // 👈 Tracked!
+      adminEmail: "admin@Aetherbot.com",  // 👈 Tracked!
       adminMethod: "bearer_token",        // 👈 Tracked!
       timestamp: "2025-10-11T12:00:00.000Z"
     }
@@ -211,7 +211,7 @@ This prevents direct browser access - only your Netlify Functions can read/write
 | `POSTMAN_GUIDE.md` | How to use Postman collection |
 | `EXAMPLES.md` | Code integration examples |
 | `STORAGE_SUMMARY.md` | Storage comparison |
-| `Solsnipe_Backend_API.postman_collection.json` | Postman collection file |
+| `Aetherbot_Backend_API.postman_collection.json` | Postman collection file |
 
 ## 🎓 Next Steps
 

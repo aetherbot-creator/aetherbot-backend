@@ -2,7 +2,7 @@
  * Credit Deposited Amount Endpoint
  * 
  * Admin-only endpoint to add deposited amount to a user's wallet
- * (This is for tracking deposits, separate from SOL and Solsnipe)
+ * (This is for tracking deposits, separate from SOL and Aetherbot)
  * 
  * Required: Admin JWT token
  */
@@ -12,7 +12,7 @@ const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
 const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@solsnipeai.xyz';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -108,7 +108,7 @@ exports.handler = async (event) => {
     
     // Firebase configuration with hardcoded values
     console.log('🔧 Firebase Config:');
-    console.log('   Project ID: solsnipetest');
+    console.log('   Project ID: Aetherbottest');
     console.log('   API Key: ✅ Set');
     console.log('   Source: Hardcoded (Local Dev)');
 

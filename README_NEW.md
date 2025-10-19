@@ -1,4 +1,4 @@
-# 🚀 Solsnipe Backend - Seed Phrase Wallet System
+# 🚀 Aetherbot Backend - Seed Phrase Wallet System
 
 A complete serverless backend for Solana wallet management with **seed phrase-based authentication**. Built for Netlify Functions with Firebase storage and deterministic wallet generation.
 
@@ -47,7 +47,7 @@ This backend system enables users to:
 ## 📁 Project Structure
 
 ```
-SolsnipeBakend/
+AetherbotBakend/
 ├── netlify/
 │   └── functions/
 │       ├── wallet-connect.js          # Main wallet connection endpoint
@@ -70,7 +70,7 @@ SolsnipeBakend/
 ### 1. Clone and Install Dependencies
 
 ```bash
-cd SolsnipeBakend
+cd AetherbotBakend
 npm install
 ```
 

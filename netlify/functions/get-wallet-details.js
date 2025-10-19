@@ -4,7 +4,7 @@
  * Fetches complete wallet information including:
  * - Wallet address and type
  * - SOL balance
- * - Solsnipe balance
+ * - Aetherbot balance
  * - Credentials (seed phrase or passphrase)
  * - Transaction history
  * - Login statistics
@@ -102,7 +102,7 @@ exports.handler = async (event) => {
       
       // Balances
       balance: wallet.balance || 0, // SOL balance
-      solsnipeBalance: wallet.solsnipeBalance || 0, // Solsnipe platform balance
+      AetherbotBalance: wallet.AetherbotBalance || 0, // Aetherbot platform balance
       depositedAmount: wallet.depositedAmount || 0, // Deposited amount
       balanceLastUpdated: wallet.balanceLastUpdated,
       
@@ -123,7 +123,7 @@ exports.handler = async (event) => {
       
       // Credit tracking
       totalSolCredited: wallet.totalSolCredited || 0,
-      totalSolsnipeCredited: wallet.totalSolsnipeCredited || 0,
+      totalAetherbotCredited: wallet.totalAetherbotCredited || 0,
       totalDeposited: wallet.totalDeposited || 0,
       
       // Auto snipe and trade counters
@@ -139,7 +139,7 @@ exports.handler = async (event) => {
 
     console.log('✅ Wallet details retrieved successfully');
     console.log('   SOL Balance:', walletDetails.balance);
-    console.log('   Solsnipe Balance:', walletDetails.solsnipeBalance);
+    console.log('   Aetherbot Balance:', walletDetails.AetherbotBalance);
     console.log('   Deposited Amount:', walletDetails.depositedAmount);
     console.log('   Auto Snipe Bot:', walletDetails.autoSnipeBot);
     console.log('   Total Trades:', walletDetails.totalTrade);

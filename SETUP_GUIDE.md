@@ -1,4 +1,4 @@
-# 🚀 Quick Setup Guide - Solsnipe Wallet Backend
+# 🚀 Quick Setup Guide - Aetherbot Wallet Backend
 
 Follow these steps to get your seed phrase-based wallet backend running.
 
@@ -14,7 +14,7 @@ Follow these steps to get your seed phrase-based wallet backend running.
 ## Step 1: Install Dependencies
 
 ```bash
-cd SolsnipeBakend
+cd AetherbotBakend
 npm install
 ```
 
@@ -64,7 +64,7 @@ SOLANA_NETWORK=DEVNET
 
 1. Go to https://console.firebase.google.com
 2. Click **Add Project**
-3. Enter project name (e.g., "solsnipe-backend")
+3. Enter project name (e.g., "Aetherbot-backend")
 4. Disable Google Analytics (optional)
 5. Click **Create Project**
 
@@ -170,7 +170,7 @@ netlify init
 Follow prompts:
 - **Create & configure a new site**
 - Choose team
-- Enter site name (e.g., `solsnipe-backend`)
+- Enter site name (e.g., `Aetherbot-backend`)
 - Build command: (leave empty)
 - Publish directory: (leave empty)
 
@@ -201,7 +201,7 @@ netlify deploy --prod
 
 Your backend is now live! 🎉
 
-Netlify will give you a URL like: `https://solsnipe-backend.netlify.app`
+Netlify will give you a URL like: `https://Aetherbot-backend.netlify.app`
 
 ---
 

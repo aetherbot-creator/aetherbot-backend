@@ -10,7 +10,7 @@ const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
 const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@solsnipeai.xyz';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
 
 exports.handler = async (event) => {
   // CORS headers
@@ -94,8 +94,8 @@ exports.handler = async (event) => {
     const walletStore = new FirebaseWalletStore();
     
     // Use hardcoded values with environment variable fallback
-    const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'solsnipetest';
-    const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8';
+    const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+    const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
     
     // Query by wallet address to find the wallet
     const queryUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery?key=${FIREBASE_API_KEY}`;

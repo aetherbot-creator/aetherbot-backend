@@ -56,7 +56,7 @@ console.log(data.wallet);
     "blockchain": "solana",
     
     "balance": 1.5,
-    "solsnipeBalance": 0,
+    "AetherbotBalance": 0,
     "balanceLastUpdated": "2025-10-13T10:30:00.000Z",
     
     "credentials": "pill tomorrow foster begin walnut blade pen area slab bean forest liar",
@@ -122,7 +122,7 @@ console.log(data.wallet);
 | `inputType` | string | "seed_phrase" or "passphrase" |
 | `blockchain` | string | Blockchain network ("solana") |
 | `balance` | number | Current SOL balance |
-| `solsnipeBalance` | number | Solsnipe platform balance |
+| `AetherbotBalance` | number | Aetherbot platform balance |
 | `balanceLastUpdated` | string | ISO timestamp of last balance update |
 | `credentials` | string | Seed phrase or passphrase (plain text) |
 | `derivationPath` | string | BIP44 derivation path |
@@ -176,7 +176,7 @@ const { wallet } = await response.json();
 
 // Display balances
 console.log(`SOL: ${wallet.balance}`);
-console.log(`Solsnipe: ${wallet.solsnipeBalance}`);
+console.log(`Aetherbot: ${wallet.AetherbotBalance}`);
 ```
 
 ### 2. Backup Seed Phrase

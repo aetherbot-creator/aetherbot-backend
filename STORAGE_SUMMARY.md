@@ -70,7 +70,7 @@ Document ID: 0x742d35cc... (wallet address)
       type: "credit",
       amount: 100,
       reason: "Reward",
-      adminEmail: "admin@solsnipe.com",
+      adminEmail: "admin@Aetherbot.com",
       adminMethod: "bearer_token",
       timestamp: "2025-10-11T12:00:00.000Z"
     }
@@ -79,7 +79,7 @@ Document ID: 0x742d35cc... (wallet address)
   createdAt: Firestore.Timestamp,
   lastAccessedAt: Firestore.Timestamp,
   lastAdjustment: {
-    by: "admin@solsnipe.com",
+    by: "admin@Aetherbot.com",
     at: "2025-10-11T12:10:00.000Z",
     reason: "Balance correction"
   }

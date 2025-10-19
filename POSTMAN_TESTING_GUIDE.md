@@ -1,12 +1,12 @@
 # 📮 Postman Collection Guide - Seed Wallet API
 
-Complete guide for testing the Solsnipe Seed Wallet API with Postman.
+Complete guide for testing the Aetherbot Seed Wallet API with Postman.
 
 ## 📦 Files Included
 
-1. **Solsnipe_Seed_Wallet_API.postman_collection.json** - Main API collection
-2. **Solsnipe_Local.postman_environment.json** - Local development environment
-3. **Solsnipe_Production.postman_environment.json** - Production environment
+1. **Aetherbot_Seed_Wallet_API.postman_collection.json** - Main API collection
+2. **Aetherbot_Local.postman_environment.json** - Local development environment
+3. **Aetherbot_Production.postman_environment.json** - Production environment
 
 ---
 
@@ -17,20 +17,20 @@ Complete guide for testing the Solsnipe Seed Wallet API with Postman.
 1. Open **Postman**
 2. Click **Import** button (top left)
 3. Drag and drop all 3 JSON files:
-   - `Solsnipe_Seed_Wallet_API.postman_collection.json`
-   - `Solsnipe_Local.postman_environment.json`
-   - `Solsnipe_Production.postman_environment.json`
+   - `Aetherbot_Seed_Wallet_API.postman_collection.json`
+   - `Aetherbot_Local.postman_environment.json`
+   - `Aetherbot_Production.postman_environment.json`
 4. Click **Import**
 
 ### Step 2: Select Environment
 
 **For Local Testing:**
 1. Click environment dropdown (top right)
-2. Select **"Solsnipe Local Development"**
+2. Select **"Aetherbot Local Development"**
 3. Verify `baseUrl` is `http://localhost:8888/api`
 
 **For Production Testing:**
-1. Select **"Solsnipe Production"**
+1. Select **"Aetherbot Production"**
 2. Update `baseUrl` with your Netlify URL:
    - Click environment name → Edit
    - Change `baseUrl` to: `https://your-site.netlify.app/api`
@@ -39,7 +39,7 @@ Complete guide for testing the Solsnipe Seed Wallet API with Postman.
 ### Step 3: Start Local Server (if testing locally)
 
 ```bash
-cd SolsnipeBakend
+cd AetherbotBakend
 netlify dev
 ```
 

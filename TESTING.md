@@ -1,6 +1,6 @@
 # 🧪 Quick Test Guide
 
-Test your Solsnipe Backend locally before deployment!
+Test your Aetherbot Backend locally before deployment!
 
 ## Prerequisites
 

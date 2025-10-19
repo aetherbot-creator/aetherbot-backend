@@ -1,4 +1,4 @@
-// 🧪 Automated Test Script for Solsnipe Backend
+// 🧪 Automated Test Script for Aetherbot Backend
 // Run with: node test-api.js
 
 const baseURL = process.env.API_URL || 'http://localhost:8888/api';
@@ -301,7 +301,7 @@ async function test12_getSession() {
 async function runAllTests() {
   console.log('\n');
   console.log('═'.repeat(50));
-  console.log('🚀 SOLSNIPE BACKEND API TEST SUITE');
+  console.log('🚀 Aetherbot BACKEND API TEST SUITE');
   console.log('═'.repeat(50));
   console.log(`Testing API at: ${baseURL}`);
   console.log(`Test Wallet: ${testWallet}`);

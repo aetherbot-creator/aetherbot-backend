@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "seed-wallet-api-2025",
-		"name": "Solsnipe Seed Wallet API",
-		"description": "Complete API collection for Solsnipe seed phrase-based wallet system.\n\n## Features:\n- Wallet connection with seed phrases/passphrases\n- Real Solana balance fetching\n- Admin authentication and balance management\n- JWT token-based authentication\n\n## Setup:\n1. Update the `baseUrl` variable with your Netlify deployment URL\n2. Configure environment variables in `.env`\n3. Run requests in order for testing\n\n## Variables:\n- `baseUrl`: Your Netlify function URL\n- `userToken`: Auto-set after wallet connection\n- `adminToken`: Auto-set after admin login\n- `testWalletAddress`: Auto-set after wallet connection",
+		"name": "Aetherbot Seed Wallet API",
+		"description": "Complete API collection for Aetherbot seed phrase-based wallet system.\n\n## Features:\n- Wallet connection with seed phrases/passphrases\n- Real Solana balance fetching\n- Admin authentication and balance management\n- JWT token-based authentication\n\n## Setup:\n1. Update the `baseUrl` variable with your Netlify deployment URL\n2. Configure environment variables in `.env`\n3. Run requests in order for testing\n\n## Variables:\n- `baseUrl`: Your Netlify function URL\n- `userToken`: Auto-set after wallet connection\n- `adminToken`: Auto-set after admin login\n- `testWalletAddress`: Auto-set after wallet connection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

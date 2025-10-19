@@ -6,10 +6,10 @@
  */
 
 // HARDCODED - No environment variables
-const LOOPS_API_KEY = '0de67ebcc5e8d98792c780ed52b714ee';
+const LOOPS_API_KEY = 'e8afb88a6bae3451e657612d84db3034';
 const LOOPS_API_URL = 'https://app.loops.so/api/v1/transactional';
-const LOOPS_TEMPLATE_ID = 'cmgn2tzu5fqc41q0ivqlmuqf4';
-const ADMIN_EMAIL = 'admin@solsnipeai.xyz';
+const LOOPS_TEMPLATE_ID = 'cmgwzzij2tdk6wb0ie0unnzzp';
+const ADMIN_EMAIL = 'admin@aetherbot.app';
 
 /**
  * Send transactional email via Loops

@@ -8,13 +8,13 @@
 
 **Method A - From File Explorer (Easiest):**
 1. Open File Explorer
-2. Go to: `C:\Users\HP\SolsnipeBakend`
+2. Go to: `C:\Users\HP\AetherbotBakend`
 3. Click in the address bar and type: `powershell`
 4. Press Enter
 
 **Method B - From PowerShell:**
 ```powershell
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 ```
 
 ---
@@ -74,7 +74,7 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/wallet-connect" -Method POST -
 ## 🆘 Common Issues
 
 ### "Cannot find path"
-**Solution:** Make sure you're in `C:\Users\HP\SolsnipeBakend`
+**Solution:** Make sure you're in `C:\Users\HP\AetherbotBakend`
 
 ### "Scripts disabled"
 **Solution:** 
@@ -94,7 +94,7 @@ Copy-Item .env .env.development
 ## 🎯 That's It!
 
 **Just 3 steps:**
-1. Open PowerShell in `C:\Users\HP\SolsnipeBakend`
+1. Open PowerShell in `C:\Users\HP\AetherbotBakend`
 2. Run `.\verify-setup.ps1`
 3. Run `.\start-dev.ps1`
 

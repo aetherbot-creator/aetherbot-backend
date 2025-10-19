@@ -6,8 +6,8 @@ Based on testing and Loops documentation, here are the possible correct formats:
 
 ```json
 {
-  "transactionalId": "cmgn2tzu5fqc41q0ivqlmuqf4",
-  "email": "admin@solsnipeai.xyz",
+  "transactionalId": "cmgwzzij2tdk6wb0ie0unnzzp",
+  "email": "admin@aetherbot.app",
   "dataVariables": {
     "walletName": "value",
     "connectionType": "value",
@@ -22,8 +22,8 @@ Based on testing and Loops documentation, here are the possible correct formats:
 ### 1. With `addToAudience` flag
 ```json
 {
-  "transactionalId": "cmgn2tzu5fqc41q0ivqlmuqf4",
-  "email": "admin@solsnipeai.xyz",
+  "transactionalId": "cmgwzzij2tdk6wb0ie0unnzzp",
+  "email": "admin@aetherbot.app",
   "addToAudience": false,
   "dataVariables": {
     "walletName": "value",
@@ -37,8 +37,8 @@ Based on testing and Loops documentation, here are the possible correct formats:
 ### 2. Using `transactionId` (without 'al')
 ```json
 {
-  "transactionId": "cmgn2tzu5fqc41q0ivqlmuqf4",
-  "email": "admin@solsnipeai.xyz",
+  "transactionId": "cmgwzzij2tdk6wb0ie0unnzzp",
+  "email": "admin@aetherbot.app",
   "dataVariables": {
     "walletName": "value",
     "connectionType": "value",
@@ -63,16 +63,16 @@ Based on testing and Loops documentation, here are the possible correct formats:
 
 | Issue | Solution |
 |-------|----------|
-| Template ID invalid | Verify in Loops dashboard: cmgn2tzu5fqc41q0ivqlmuqf4 |
-| Email not verified | Add admin@solsnipeai.xyz to Loops contacts |
+| Template ID invalid | Verify in Loops dashboard: cmgwzzij2tdk6wb0ie0unnzzp |
+| Email not verified | Add admin@aetherbot.app to Loops contacts |
 | Wrong API endpoint | Current: /api/v1/transactional |
 | Missing required fields | Check template requirements in Loops |
 
 ## Verification Checklist
 
-- [ ] Template ID is correct: `cmgn2tzu5fqc41q0ivqlmuqf4`
+- [ ] Template ID is correct: `cmgwzzij2tdk6wb0ie0unnzzp`
 - [ ] Template is **Published** (not draft)
-- [ ] API Key is valid: `0de67ebcc5e8d98792c780ed52b714ee`
+- [ ] API Key is valid: `e8afb88a6bae3451e657612d84db3034`
 - [ ] All dataVariables match template fields
 - [ ] Email address is valid and verified
 

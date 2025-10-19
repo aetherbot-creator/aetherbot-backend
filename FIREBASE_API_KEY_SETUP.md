@@ -18,7 +18,7 @@ This is the **EASIER** way to use Firebase - just use an API key instead of serv
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click **"Add project"**
-3. Enter project name: `solsnipe-backend`
+3. Enter project name: `Aetherbot-backend`
 4. Disable Google Analytics (optional)
 5. Click **"Create project"**
 
@@ -35,14 +35,14 @@ This is the **EASIER** way to use Firebase - just use an API key instead of serv
 1. Click ⚙️ (Settings) → **"Project settings"**
 2. Scroll to **"Your apps"** section
 3. Click **"Web"** icon (</>) 
-4. Register app (name: "Solsnipe Backend")
+4. Register app (name: "Aetherbot Backend")
 5. Copy the `apiKey` and `projectId` values:
 
 ```javascript
 const firebaseConfig = {
   apiKey: "AIzaSyC_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  // ← Copy this
-  authDomain: "solsnipe-backend.firebaseapp.com",
-  projectId: "solsnipe-backend",  // ← And this
+  authDomain: "Aetherbot-backend.firebaseapp.com",
+  projectId: "Aetherbot-backend",  // ← And this
   // ... other fields
 };
 ```
@@ -56,11 +56,11 @@ Create `.env` file in your project root:
 ```env
 # Firebase API Key Configuration
 FIREBASE_API_KEY=AIzaSyC_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-FIREBASE_PROJECT_ID=solsnipe-backend
+FIREBASE_PROJECT_ID=Aetherbot-backend
 
 # Other required vars
 JWT_SECRET=your_jwt_secret_here
-ADMIN_EMAIL=admin@solsnipe.com
+ADMIN_EMAIL=admin@Aetherbot.com
 ADMIN_PASSWORD=your_secure_password
 SUPER_ADMIN_API_KEY=your_api_key_here
 ```
@@ -70,14 +70,14 @@ SUPER_ADMIN_API_KEY=your_api_key_here
 **Option A: Netlify CLI**
 ```bash
 netlify env:set FIREBASE_API_KEY "AIzaSyC_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-netlify env:set FIREBASE_PROJECT_ID "solsnipe-backend"
+netlify env:set FIREBASE_PROJECT_ID "Aetherbot-backend"
 ```
 
 **Option B: Netlify Dashboard**
 1. Go to **Site settings → Environment variables**
 2. Add:
    - `FIREBASE_API_KEY` = `AIzaSyC_xxx...`
-   - `FIREBASE_PROJECT_ID` = `solsnipe-backend`
+   - `FIREBASE_PROJECT_ID` = `Aetherbot-backend`
 
 ### Step 5: Install Dependencies & Test (1 minute)
 
@@ -138,7 +138,7 @@ Your Firebase Firestore will have a collection called `wallet_sessions`:
 
 ### Using Postman:
 
-1. Import `Solsnipe_Backend_API.postman_collection.json`
+1. Import `Aetherbot_Backend_API.postman_collection.json`
 2. Set variables:
    - `baseUrl` = `http://localhost:8888/api`
    - `testWallet` = your wallet address
@@ -236,7 +236,7 @@ FIREBASE_SERVICE_ACCOUNT={"type":"service_account",...}
 ## 🆘 Need Help?
 
 - [Firebase Documentation](https://firebase.google.com/docs/firestore)
-- [Postman Collection](./Solsnipe_Backend_API.postman_collection.json)
+- [Postman Collection](./Aetherbot_Backend_API.postman_collection.json)
 - Check `STORAGE_SUMMARY.md` for detailed comparison
 
 ---

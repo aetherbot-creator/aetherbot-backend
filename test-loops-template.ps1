@@ -1,9 +1,9 @@
 # Test Loops Template ID
 # This script checks if your template ID is valid
 
-$apiKey = "0de67ebcc5e8d98792c780ed52b714ee"
-$templateId = "cmgn2tzu5fqc41q0ivqlmuqf4"
-$testEmail = "admin@solsnipeai.xyz"
+$apiKey = "e8afb88a6bae3451e657612d84db3034"
+$templateId = "cmgwzzij2tdk6wb0ie0unnzzp"
+$testEmail = "admin@aetherbot.app"
 
 Write-Host "🔍 Testing Loops Template ID..." -ForegroundColor Cyan
 Write-Host "   Template ID: $templateId" -ForegroundColor Gray

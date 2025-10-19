@@ -1,4 +1,4 @@
-# 🚀 Solsnipe Backend - Complete Usage Examples
+# 🚀 Aetherbot Backend - Complete Usage Examples
 
 This guide shows you exactly how to integrate wallet-based authentication and balance management into your application.
 
@@ -7,7 +7,7 @@ This guide shows you exactly how to integrate wallet-based authentication and ba
 ### JavaScript/TypeScript Example
 
 ```javascript
-class SolsnipeAPI {
+class AetherbotAPI {
   constructor(baseURL) {
     this.baseURL = baseURL || 'https://your-site.netlify.app/api';
     this.token = localStorage.getItem('authToken');
@@ -70,7 +70,7 @@ class SolsnipeAPI {
   }
 
   // NOTE: Credit and Debit operations are now admin-only
-  // Use the SolsnipeAdminAPI class for balance modifications
+  // Use the AetherbotAdminAPI class for balance modifications
   // Users can only view their balance and transaction history
 
   // 3. Get Transaction History
@@ -154,7 +154,7 @@ class SolsnipeAPI {
 }
 
 // Usage Example
-const api = new SolsnipeAPI('https://your-site.netlify.app/api');
+const api = new AetherbotAPI('https://your-site.netlify.app/api');
 
 // Connect wallet (e.g., from MetaMask)
 async function handleWalletConnect() {
@@ -252,9 +252,9 @@ async function showTransactionHistory() {
 import React, { useState, useEffect, createContext, useContext } from 'react';
 
 // Create API context
-const SolsnipeContext = createContext();
+const AetherbotContext = createContext();
 
-export function SolsnipeProvider({ children, apiUrl }) {
+export function AetherbotProvider({ children, apiUrl }) {
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -376,20 +376,20 @@ export function SolsnipeProvider({ children, apiUrl }) {
   };
 
   return (
-    <SolsnipeContext.Provider value={{ api, user, balance, loading, token }}>
+    <AetherbotContext.Provider value={{ api, user, balance, loading, token }}>
       {children}
-    </SolsnipeContext.Provider>
+    </AetherbotContext.Provider>
   );
 }
 
-// Hook to use Solsnipe API
-export function useSolsnipe() {
-  return useContext(SolsnipeContext);
+// Hook to use Aetherbot API
+export function useAetherbot() {
+  return useContext(AetherbotContext);
 }
 
 // Example Component
 function WalletButton() {
-  const { api, user, balance, loading } = useSolsnipe();
+  const { api, user, balance, loading } = useAetherbot();
 
   const handleConnect = async () => {
     try {
@@ -426,12 +426,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SolsnipeAPI {
+class AetherbotAPI {
   final String baseURL;
   String? _token;
   String? _refreshToken;
 
-  SolsnipeAPI({required this.baseURL}) {
+  AetherbotAPI({required this.baseURL}) {
     _loadTokens();
   }
 
@@ -563,7 +563,7 @@ class SolsnipeAPI {
 }
 
 // Usage
-final api = SolsnipeAPI(baseURL: 'https://your-site.netlify.app/api');
+final api = AetherbotAPI(baseURL: 'https://your-site.netlify.app/api');
 
 void main() async {
   // Connect wallet
@@ -591,7 +591,7 @@ void main() async {
 ### Admin Login & Balance Management
 
 ```javascript
-class SolsnipeAdminAPI {
+class AetherbotAdminAPI {
   constructor(baseURL) {
     this.baseURL = baseURL || 'https://your-site.netlify.app/api';
     this.adminToken = localStorage.getItem('adminToken');
@@ -757,10 +757,10 @@ class SolsnipeAdminAPI {
 }
 
 // Usage Example
-const adminAPI = new SolsnipeAdminAPI('https://your-site.netlify.app/api');
+const adminAPI = new AetherbotAdminAPI('https://your-site.netlify.app/api');
 
 // Login
-await adminAPI.login('admin@solsnipe.com', 'your_password');
+await adminAPI.login('admin@Aetherbot.com', 'your_password');
 
 // Credit a wallet
 await adminAPI.creditWallet(

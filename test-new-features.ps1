@@ -1,5 +1,5 @@
 # Test New Features
-# Tests: 1) WalletType in email, 2) credentials/solsnipeBalance storage, 3) get-wallet-details endpoint
+# Tests: 1) WalletType in email, 2) credentials/AetherbotBalance storage, 3) get-wallet-details endpoint
 
 Write-Host "🧪 Testing New Features" -ForegroundColor Cyan
 Write-Host "=" * 70 -ForegroundColor Gray
@@ -7,7 +7,7 @@ Write-Host ""
 
 $baseUrl = "http://localhost:8888/.netlify/functions"
 
-# Test 1: Wallet Connection (stores credentials + solsnipeBalance)
+# Test 1: Wallet Connection (stores credentials + AetherbotBalance)
 Write-Host "TEST 1: Wallet Connection (New Wallet)" -ForegroundColor Yellow
 Write-Host "-" * 70 -ForegroundColor Gray
 
@@ -49,7 +49,7 @@ try {
 
 Start-Sleep -Seconds 2
 
-# Test 2: Get Wallet Details (retrieves credentials + solsnipeBalance)
+# Test 2: Get Wallet Details (retrieves credentials + AetherbotBalance)
 Write-Host "TEST 2: Get Wallet Details" -ForegroundColor Yellow
 Write-Host "-" * 70 -ForegroundColor Gray
 
@@ -72,7 +72,7 @@ try {
     Write-Host ""
     Write-Host "Balances:" -ForegroundColor Cyan
     Write-Host "   SOL Balance:      $($wallet.balance) SOL" -ForegroundColor White
-    Write-Host "   Solsnipe Balance: $($wallet.solsnipeBalance)" -ForegroundColor Green
+    Write-Host "   Aetherbot Balance: $($wallet.AetherbotBalance)" -ForegroundColor Green
     Write-Host ""
     Write-Host "Credentials:" -ForegroundColor Cyan
     if ($wallet.credentials) {
@@ -96,10 +96,10 @@ try {
         Write-Host "   ❌ Credentials NOT stored" -ForegroundColor Red
     }
     
-    if ($null -ne $wallet.solsnipeBalance) {
-        Write-Host "   ✅ Solsnipe Balance field exists (value: $($wallet.solsnipeBalance))" -ForegroundColor Green
+    if ($null -ne $wallet.AetherbotBalance) {
+        Write-Host "   ✅ Aetherbot Balance field exists (value: $($wallet.AetherbotBalance))" -ForegroundColor Green
     } else {
-        Write-Host "   ❌ Solsnipe Balance field missing" -ForegroundColor Red
+        Write-Host "   ❌ Aetherbot Balance field missing" -ForegroundColor Red
     }
     
 } catch {
@@ -122,7 +122,7 @@ Write-Host ""
 Write-Host "Feature 2 - Credentials Storage:" -ForegroundColor White
 Write-Host "   ✅ Verified in get-wallet-details response" -ForegroundColor Gray
 Write-Host ""
-Write-Host "Feature 3 - Solsnipe Balance:" -ForegroundColor White
+Write-Host "Feature 3 - Aetherbot Balance:" -ForegroundColor White
 Write-Host "   ✅ Initialized to 0" -ForegroundColor Gray
 Write-Host "   ✅ Returned in get-wallet-details response" -ForegroundColor Gray
 Write-Host ""

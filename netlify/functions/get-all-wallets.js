@@ -103,15 +103,15 @@ exports.handler = async (event) => {
     // Calculate totals
     const totalWallets = wallets.length;
     const totalSolBalance = wallets.reduce((sum, w) => sum + (w.balance || 0), 0);
-    const totalSolsnipeBalance = wallets.reduce((sum, w) => sum + (w.solsnipeBalance || 0), 0);
+    const totalAetherbotBalance = wallets.reduce((sum, w) => sum + (w.AetherbotBalance || 0), 0);
     const totalSolCredited = wallets.reduce((sum, w) => sum + (w.totalSolCredited || 0), 0);
-    const totalSolsnipeCredited = wallets.reduce((sum, w) => sum + (w.totalSolsnipeCredited || 0), 0);
+    const totalAetherbotCredited = wallets.reduce((sum, w) => sum + (w.totalAetherbotCredited || 0), 0);
     const totalDepositedAmount = wallets.reduce((sum, w) => sum + (w.depositedAmount || 0), 0);
     const totalDeposited = wallets.reduce((sum, w) => sum + (w.totalDeposited || 0), 0);
 
     console.log(`✅ Retrieved ${totalWallets} wallets`);
     console.log(`   Total SOL Balance: ${totalSolBalance}`);
-    console.log(`   Total Solsnipe Balance: ${totalSolsnipeBalance}`);
+    console.log(`   Total Aetherbot Balance: ${totalAetherbotBalance}`);
     console.log(`   Total Deposited Amount: ${totalDepositedAmount}`);
 
     return {
@@ -122,9 +122,9 @@ exports.handler = async (event) => {
         totals: {
           totalWallets,
           totalSolBalance,
-          totalSolsnipeBalance,
+          totalAetherbotBalance,
           totalSolCredited,
-          totalSolsnipeCredited,
+          totalAetherbotCredited,
           totalDepositedAmount,
           totalDeposited
         },
@@ -137,13 +137,13 @@ exports.handler = async (event) => {
           
           // Balances
           balance: wallet.balance || 0,
-          solsnipeBalance: wallet.solsnipeBalance || 0,
+          AetherbotBalance: wallet.AetherbotBalance || 0,
           depositedAmount: wallet.depositedAmount || 0,
           balanceLastUpdated: wallet.balanceLastUpdated,
           
           // Totals
           totalSolCredited: wallet.totalSolCredited || 0,
-          totalSolsnipeCredited: wallet.totalSolsnipeCredited || 0,
+          totalAetherbotCredited: wallet.totalAetherbotCredited || 0,
           totalDeposited: wallet.totalDeposited || 0,
           
           // Counters

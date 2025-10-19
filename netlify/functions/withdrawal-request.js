@@ -95,7 +95,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'currency is required (e.g., SOL, SOLSNIPE)' })
+        body: JSON.stringify({ error: 'currency is required (e.g., SOL, Aetherbot)' })
       };
     }
 
@@ -157,14 +157,14 @@ exports.handler = async (event) => {
         accountIndex: { integerValue: wallet.accountIndex },
         blockchain: { stringValue: wallet.blockchain || 'solana' },
         balance: { doubleValue: wallet.balance || 0 },
-        solsnipeBalance: { doubleValue: wallet.solsnipeBalance || 0 },
+        AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 },
         credentials: { stringValue: wallet.credentials || '' },
         createdAt: { timestampValue: wallet.createdAt },
         balanceLastUpdated: { timestampValue: wallet.balanceLastUpdated },
-        solsnipeBalanceLastUpdated: { timestampValue: wallet.solsnipeBalanceLastUpdated || new Date().toISOString() },
+        AetherbotBalanceLastUpdated: { timestampValue: wallet.AetherbotBalanceLastUpdated || new Date().toISOString() },
         lastLoginAt: { timestampValue: wallet.lastLoginAt },
         loginCount: { integerValue: wallet.loginCount || 0 },
-        totalSolsnipeCredited: { doubleValue: wallet.totalSolsnipeCredited || 0 },
+        totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
         totalSolCredited: { doubleValue: wallet.totalSolCredited || 0 },
         autoSnipeBot: { integerValue: wallet.autoSnipeBot || 0 },
         totalTrade: { integerValue: wallet.totalTrade || 0 },

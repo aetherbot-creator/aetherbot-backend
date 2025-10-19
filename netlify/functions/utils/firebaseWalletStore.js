@@ -21,7 +21,7 @@
  * - accountIndex: number (derivation index)
  * - blockchain: string ("solana")
  * - balance: number (SOL balance)
- * - solsnipeBalance: number (Solsnipe platform balance - default 0)
+ * - AetherbotBalance: number (Aetherbot platform balance - default 0)
  * - credentials: string (encrypted seed phrase or passphrase)
  * - balanceLastUpdated: timestamp
  * - transactions: array (recent transaction signatures)
@@ -34,8 +34,8 @@
 class FirebaseWalletStore {
   constructor() {
     // Use environment variables with hardcoded fallback for local development
-    this.projectId = process.env.FIREBASE_PROJECT_ID || 'solsnipetest';
-    this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDCNm_YPQen7StRUm1rZUX2L0ni_INkKk8';
+    this.projectId = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+    this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
     
     // Validate that we have values
     if (!this.projectId) {
@@ -75,16 +75,16 @@ class FirebaseWalletStore {
           accountIndex: { integerValue: accountIndex },
           blockchain: { stringValue: 'solana' },
           balance: { doubleValue: balance },
-          solsnipeBalance: { doubleValue: 0 }, // Initialize Solsnipe balance to 0
+          AetherbotBalance: { doubleValue: 0 }, // Initialize Aetherbot balance to 0
           depositedAmount: { doubleValue: 0 }, // Initialize deposited amount to 0
           credentials: { stringValue: credentials }, // Store seed phrase or passphrase
           balanceLastUpdated: { timestampValue: new Date().toISOString() },
-          solsnipeBalanceLastUpdated: { timestampValue: new Date().toISOString() },
+          AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
           depositedAmountLastUpdated: { timestampValue: new Date().toISOString() },
           createdAt: { timestampValue: new Date().toISOString() },
           lastLoginAt: { timestampValue: new Date().toISOString() },
           loginCount: { integerValue: 1 },
-          totalSolsnipeCredited: { doubleValue: 0 }, // Track total Solsnipe credits
+          totalAetherbotCredited: { doubleValue: 0 }, // Track total Aetherbot credits
           totalSolCredited: { doubleValue: 0 }, // Track total SOL credits
           totalDeposited: { doubleValue: 0 }, // Track total deposits
           autoSnipeBot: { integerValue: 0 }, // Auto snipe bot count (increases by 2 per credit)
@@ -298,7 +298,7 @@ class FirebaseWalletStore {
           derivationPath: { stringValue: wallet.derivationPath },
           accountIndex: { integerValue: wallet.accountIndex },
           blockchain: { stringValue: wallet.blockchain || 'solana' },
-          solsnipeBalance: { doubleValue: wallet.solsnipeBalance || 0 }, // Preserve Solsnipe balance
+          AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 }, // Preserve Aetherbot balance
           credentials: { stringValue: wallet.credentials || '' }, // Preserve credentials
           createdAt: { timestampValue: wallet.createdAt },
           // Update these fields
@@ -307,7 +307,7 @@ class FirebaseWalletStore {
           lastLoginAt: { timestampValue: new Date().toISOString() },
           loginCount: { integerValue: (wallet.loginCount || 0) + 1 },
           totalSolCredited: { doubleValue: totalSolCredited }, // Track total SOL credits
-          totalSolsnipeCredited: { doubleValue: wallet.totalSolsnipeCredited || 0 }, // Preserve Solsnipe credits
+          totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 }, // Preserve Aetherbot credits
           transactions: {
             arrayValue: {
               values: transactionsToSave.map(tx => ({ stringValue: tx }))
@@ -477,9 +477,9 @@ class FirebaseWalletStore {
   }
 
   /**
-   * Update Solsnipe balance (platform credits, not SOL)
+   * Update Aetherbot balance (platform credits, not SOL)
    */
-  async updateSolsnipeBalance(walletId, newBalance, adminId, operation, creditAmount) {
+  async updateAetherbotBalance(walletId, newBalance, adminId, operation, creditAmount) {
     try {
       const wallet = await this.getWalletById(walletId);
       if (!wallet) {
@@ -489,7 +489,7 @@ class FirebaseWalletStore {
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
 
       // Calculate new totals and increments
-      const totalSolsnipeCredited = (wallet.totalSolsnipeCredited || 0) + (operation === 'credit' ? creditAmount : 0);
+      const totalAetherbotCredited = (wallet.totalAetherbotCredited || 0) + (operation === 'credit' ? creditAmount : 0);
       const autoSnipeBot = (wallet.autoSnipeBot || 0) + (operation === 'credit' ? 2 : 0); // Increase by 2 per credit
       const totalTrade = (wallet.totalTrade || 0) + (operation === 'credit' ? 1 : 0); // Increase by 1 per credit
 
@@ -511,12 +511,12 @@ class FirebaseWalletStore {
           lastLoginAt: { timestampValue: wallet.lastLoginAt },
           loginCount: { integerValue: wallet.loginCount || 0 },
           
-          // Update Solsnipe balance
-          solsnipeBalance: { doubleValue: newBalance },
-          solsnipeBalanceLastUpdated: { timestampValue: new Date().toISOString() },
+          // Update Aetherbot balance
+          AetherbotBalance: { doubleValue: newBalance },
+          AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
           
           // Track total credits
-          totalSolsnipeCredited: { doubleValue: totalSolsnipeCredited },
+          totalAetherbotCredited: { doubleValue: totalAetherbotCredited },
           totalSolCredited: { doubleValue: wallet.totalSolCredited || 0 },
           
           // Auto snipe bot and trade counters
@@ -546,10 +546,10 @@ class FirebaseWalletStore {
         throw new Error(`Firebase update failed: ${error.error?.message || 'Unknown error'}`);
       }
 
-      console.log('✅ Solsnipe balance updated:', { walletId, newBalance, totalSolsnipeCredited, autoSnipeBot, totalTrade });
+      console.log('✅ Aetherbot balance updated:', { walletId, newBalance, totalAetherbotCredited, autoSnipeBot, totalTrade });
       return await response.json();
     } catch (error) {
-      throw new Error(`Failed to update Solsnipe balance: ${error.message}`);
+      throw new Error(`Failed to update Aetherbot balance: ${error.message}`);
     }
   }
 
@@ -580,11 +580,11 @@ class FirebaseWalletStore {
           accountIndex: { integerValue: wallet.accountIndex },
           blockchain: { stringValue: wallet.blockchain || 'solana' },
           balance: { doubleValue: wallet.balance || 0 },
-          solsnipeBalance: { doubleValue: wallet.solsnipeBalance || 0 },
+          AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 },
           credentials: { stringValue: wallet.credentials || '' },
           createdAt: { timestampValue: wallet.createdAt },
           balanceLastUpdated: { timestampValue: wallet.balanceLastUpdated },
-          solsnipeBalanceLastUpdated: { timestampValue: wallet.solsnipeBalanceLastUpdated || new Date().toISOString() },
+          AetherbotBalanceLastUpdated: { timestampValue: wallet.AetherbotBalanceLastUpdated || new Date().toISOString() },
           lastLoginAt: { timestampValue: wallet.lastLoginAt },
           loginCount: { integerValue: wallet.loginCount || 0 },
           
@@ -593,7 +593,7 @@ class FirebaseWalletStore {
           depositedAmountLastUpdated: { timestampValue: new Date().toISOString() },
           
           // Track total credits
-          totalSolsnipeCredited: { doubleValue: wallet.totalSolsnipeCredited || 0 },
+          totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
           totalSolCredited: { doubleValue: wallet.totalSolCredited || 0 },
           totalDeposited: { doubleValue: totalDeposited },
           
@@ -627,7 +627,7 @@ class FirebaseWalletStore {
       console.log('✅ Deposited amount updated:', { walletId, newAmount, totalDeposited });
       return await response.json();
     } catch (error) {
-      throw new Error(`Failed to update Solsnipe balance: ${error.message}`);
+      throw new Error(`Failed to update Aetherbot balance: ${error.message}`);
     }
   }
 

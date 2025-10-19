@@ -14,13 +14,13 @@ Error: `FIREBASE_PROJECT_ID environment variable is not set`
 
 **Option A: From File Explorer**
 1. Open File Explorer
-2. Navigate to: `C:\Users\HP\SolsnipeBakend`
+2. Navigate to: `C:\Users\HP\AetherbotBakend`
 3. In the address bar, type: `powershell` and press Enter
 4. A PowerShell window will open in the correct folder
 
 **Option B: From Existing PowerShell**
 ```powershell
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 ```
 
 ### Step 2: Verify Everything is Set Up
@@ -63,7 +63,7 @@ netlify dev
 ```
 🚀 Starting Netlify Dev Server...
 
-📁 Working Directory: C:\Users\HP\SolsnipeBakend
+📁 Working Directory: C:\Users\HP\AetherbotBakend
 
 ✅ Found .env.development file
 
@@ -98,7 +98,7 @@ You should see logs like:
 ```
 Request from ::1: POST /.netlify/functions/wallet-connect
 🔧 Firebase Config:
-   Project ID: solsnipetest
+   Project ID: Aetherbottest
    API Key: ✅ Set
 🔍 Querying Firebase for wallet with seed hash: c557eec878...
 ℹ️  No wallet found for this seed hash (new user)
@@ -113,9 +113,9 @@ Response with status 200
 
 ### Option 1: Using Postman (Recommended)
 
-1. Import the collection: `Solsnipe_Seed_Wallet_API.postman_collection.json`
-2. Import the environment: `Solsnipe_Local.postman_environment.json`
-3. Select "Solsnipe Local" environment in Postman
+1. Import the collection: `Aetherbot_Seed_Wallet_API.postman_collection.json`
+2. Import the environment: `Aetherbot_Local.postman_environment.json`
+3. Select "Aetherbot Local" environment in Postman
 4. Run: "User Endpoints → 1. Connect Wallet (Seed Phrase - New User)"
 
 ### Option 2: Using PowerShell
@@ -150,12 +150,12 @@ $response | ConvertTo-Json -Depth 5
 
 ## 🔧 Troubleshooting
 
-### Problem: "Cannot find path 'C:\Users\HP\SolsnipeBakend'"
+### Problem: "Cannot find path 'C:\Users\HP\AetherbotBakend'"
 
 **Solution:**
 ```powershell
 # Check if folder exists
-Test-Path "C:\Users\HP\SolsnipeBakend"
+Test-Path "C:\Users\HP\AetherbotBakend"
 
 # If False, navigate to where your project actually is
 cd "path\to\your\project"
@@ -199,10 +199,10 @@ npm install
 # Verify .env.development has the variable
 Get-Content .env.development | Select-String "FIREBASE_PROJECT_ID"
 
-# Should show: FIREBASE_PROJECT_ID=solsnipetest
+# Should show: FIREBASE_PROJECT_ID=Aetherbottest
 
 # If not found, add it manually
-Add-Content .env.development "`nFIREBASE_PROJECT_ID=solsnipetest"
+Add-Content .env.development "`nFIREBASE_PROJECT_ID=Aetherbottest"
 
 # Restart server
 .\start-dev.ps1
@@ -214,7 +214,7 @@ Add-Content .env.development "`nFIREBASE_PROJECT_ID=solsnipetest"
 
 ```powershell
 # Navigate to project
-cd C:\Users\HP\SolsnipeBakend
+cd C:\Users\HP\AetherbotBakend
 
 # Verify setup
 .\verify-setup.ps1
@@ -237,11 +237,11 @@ Invoke-RestMethod -Uri "http://localhost:8888/api/wallet-connect" -Method POST -
 
 ## 🎯 Summary
 
-1. **Always** run from `C:\Users\HP\SolsnipeBakend`
+1. **Always** run from `C:\Users\HP\AetherbotBakend`
 2. **Always** verify with `.\verify-setup.ps1` first
 3. **Use** `.\start-dev.ps1` to start the server
 4. **Test** with Postman or PowerShell
-5. **Check logs** for "🔧 Firebase Config: Project ID: solsnipetest"
+5. **Check logs** for "🔧 Firebase Config: Project ID: Aetherbottest"
 
 ---
 

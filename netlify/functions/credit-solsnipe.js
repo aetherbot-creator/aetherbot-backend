@@ -1,7 +1,7 @@
 /**
- * Credit Solsnipe Balance Endpoint
+ * Credit Aetherbot Balance Endpoint
  * 
- * Admin-only endpoint to add Solsnipe credits to a user's wallet
+ * Admin-only endpoint to add Aetherbot credits to a user's wallet
  * (This is for platform credits, not SOL cryptocurrency)
  * 
  * Required: Admin JWT token
@@ -12,7 +12,7 @@ const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
 const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@solsnipeai.xyz';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -95,7 +95,7 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log(`💰 Crediting ${amount} Solsnipe to wallet: ${walletAddress}`);
+    console.log(`💰 Crediting ${amount} Aetherbot to wallet: ${walletAddress}`);
 
     // Get wallet from Firebase
     const walletStore = new FirebaseWalletStore();
@@ -109,15 +109,15 @@ exports.handler = async (event) => {
       };
     }
 
-    const previousBalance = wallet.solsnipeBalance || 0;
+    const previousBalance = wallet.AetherbotBalance || 0;
     const newBalance = previousBalance + amount;
 
-    console.log(`   Previous Solsnipe balance: ${previousBalance}`);
+    console.log(`   Previous Aetherbot balance: ${previousBalance}`);
     console.log(`   Credit amount: ${amount}`);
-    console.log(`   New Solsnipe balance: ${newBalance}`);
+    console.log(`   New Aetherbot balance: ${newBalance}`);
 
-    // Update Solsnipe balance
-    await walletStore.updateSolsnipeBalance(
+    // Update Aetherbot balance
+    await walletStore.updateAetherbotBalance(
       wallet.walletId,
       newBalance,
       decoded.adminId,
@@ -128,8 +128,8 @@ exports.handler = async (event) => {
     // Send email notification (async, don't wait)
     sendAdminNotificationEmail(ADMIN_EMAIL, {
       walletAddress,
-      operation: 'Credit Solsnipe Balance',
-      operationId: `solsnipe-credit-${Date.now()}`,
+      operation: 'Credit Aetherbot Balance',
+      operationId: `Aetherbot-credit-${Date.now()}`,
       amount: `${amount} credits (Total: ${newBalance})`
     }).catch(err => console.error('Email notification failed:', err.message));
 
@@ -138,7 +138,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         success: true,
-        message: 'Solsnipe balance credited successfully',
+        message: 'Aetherbot balance credited successfully',
         walletAddress,
         previousBalance,
         creditAmount: amount,
@@ -149,7 +149,7 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    console.error('💥 Credit Solsnipe error:', error.message);
+    console.error('💥 Credit Aetherbot error:', error.message);
     
     return {
       statusCode: 500,

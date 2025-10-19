@@ -1,18 +1,18 @@
 # 📮 Postman Collection Guide
 
-This guide explains how to use the Postman collection to test all Solsnipe Backend API endpoints.
+This guide explains how to use the Postman collection to test all Aetherbot Backend API endpoints.
 
 ## 📥 Import Collection
 
 ### Method 1: Import File
 1. Open Postman
 2. Click **"Import"** button
-3. Select `Solsnipe_Backend_API.postman_collection.json`
+3. Select `Aetherbot_Backend_API.postman_collection.json`
 4. Click **"Import"**
 
 ### Method 2: Drag & Drop
 1. Open Postman
-2. Drag `Solsnipe_Backend_API.postman_collection.json` into Postman window
+2. Drag `Aetherbot_Backend_API.postman_collection.json` into Postman window
 3. Collection imported! ✅
 
 ## ⚙️ Configure Variables
@@ -26,7 +26,7 @@ After importing, configure these variables:
 | `baseUrl` | `http://localhost:8888/api` | Local dev server |
 | `productionUrl` | `https://your-site.netlify.app/api` | Production URL |
 | `testWallet` | `0x742d35Cc...` | Test wallet address |
-| `adminEmail` | `admin@solsnipe.com` | Your admin email |
+| `adminEmail` | `admin@Aetherbot.com` | Your admin email |
 | `adminPassword` | `your_password` | Your admin password |
 | `superAdminApiKey` | `your_api_key` | Your super admin API key |
 | `userToken` | (auto-filled) | User auth token |
@@ -87,7 +87,7 @@ After importing, configure these variables:
 ## 📂 Collection Structure
 
 ```
-Solsnipe Backend API
+Aetherbot Backend API
 ├─ 1. User Authentication
 │  ├─ Connect Wallet (Ethereum)
 │  ├─ Connect Wallet (Solana)
@@ -184,7 +184,7 @@ X-API-Key: {{superAdminApiKey}}
     "balance": 1000,
     "previousBalance": 500,
     "newBalance": 1000,
-    "creditedBy": "admin@solsnipe.com",
+    "creditedBy": "admin@Aetherbot.com",
     "timestamp": "2025-10-11T12:00:00.000Z"
   }
 }
