@@ -273,6 +273,8 @@ class FirebaseWalletStore {
    */
   async updateWalletBalance(walletId, balance, transactions = [], email = null) {
     try {
+      console.log(`📝 Updating wallet ${walletId} with email: ${email || 'none provided'}`);
+      
       const wallet = await this.getWalletById(walletId);
       if (!wallet) {
         throw new Error('Wallet not found');

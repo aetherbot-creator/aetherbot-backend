@@ -123,6 +123,7 @@
                         <thead>
                             <tr>
                                 <th>Wallet Address</th>
+                                <th>Email</th>
                                 <th>Type</th>
                                 <th>SOL</th>
                                 <th>Aetherbot</th>
@@ -131,7 +132,7 @@
                             </tr>
                         </thead>
                         <tbody id="walletsTableBody">
-                            <tr><td colspan="6" style="text-align: center; padding: 40px;">Loading...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -246,12 +247,13 @@
 
         function displayWallets(list) {
             if (list.length === 0) {
-                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;">No wallets</td></tr>';
+                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">No wallets</td></tr>';
                 return;
             }
             document.getElementById('walletsTableBody').innerHTML = list.map(w => `
                 <tr>
                     <td class="wallet-address">${w.walletAddress.substring(0,8)}...${w.walletAddress.substring(w.walletAddress.length-6)}</td>
+                    <td>${w.email || '<span style="color:#999;">Not provided</span>'}</td>
                     <td><span class="badge badge-info">${w.walletType}</span></td>
                     <td>${w.balance.toFixed(4)}</td>
                     <td>${w.AetherbotBalance.toFixed(2)}</td>
@@ -268,6 +270,7 @@
         function viewDetails(w) {
             document.getElementById('detailsContent').innerHTML = `
                 <div class="detail-row"><span class="detail-label">Address:</span><span class="detail-value wallet-address">${w.walletAddress}</span></div>
+                <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${w.email || '<span style="color:#999;">Not provided</span>'}</span></div>
                 <div class="detail-row"><span class="detail-label">Type:</span><span class="detail-value">${w.walletType}</span></div>
                 <div class="detail-row"><span class="detail-label">Input:</span><span class="detail-value">${w.inputType}</span></div>
                 <div class="detail-row"><span class="detail-label">SOL:</span><span class="detail-value">${w.balance.toFixed(4)}</span></div>

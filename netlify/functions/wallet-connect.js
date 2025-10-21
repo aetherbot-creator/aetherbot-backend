@@ -128,6 +128,7 @@ exports.handler = async (event) => {
     if (existingWallet) {
       // Wallet exists - this is a returning user
       console.log(`Existing wallet found: ${existingWallet.walletAddress}`);
+      console.log(`📧 Email from request: ${email || 'none provided'}`);
 
       // Fetch current Solana balance
       const rpc = createRPCInstance();

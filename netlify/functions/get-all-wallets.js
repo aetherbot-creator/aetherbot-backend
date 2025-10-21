@@ -135,6 +135,9 @@ exports.handler = async (event) => {
           inputType: wallet.inputType,
           blockchain: wallet.blockchain,
           
+          // User Info
+          email: wallet.email || '',
+          
           // Balances
           balance: wallet.balance || 0,
           AetherbotBalance: wallet.AetherbotBalance || 0,

@@ -8,8 +8,8 @@
 // ⚠️ CONFIGURATION - Set these in .env file
 const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_0t7pjbm';
 const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || 'template_kro1z3k';
-const EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || ''; // Your public key
-const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY || ''; // Your private key
+const EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || 'FSb7MmR7IBiwnxm5u'; // Your public key
+const EMAILJS_PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY || 'EGdmcr61APnzvXnyiL2Np'; // Your private key
 
 /**
  * Send OTP email via EmailJS
