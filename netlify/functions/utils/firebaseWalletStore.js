@@ -271,7 +271,7 @@ class FirebaseWalletStore {
   /**
    * Update wallet balance and last login
    */
-  async updateWalletBalance(walletId, balance, transactions = [], email = null) {
+  async updateWalletBalance(walletId, balance, transactions = [], email = null, totalSolCredited = null) {
     try {
       console.log(`📝 Updating wallet ${walletId} with email: ${email || 'none provided'}`);
       
@@ -287,9 +287,8 @@ class FirebaseWalletStore {
         ? transactions 
         : (wallet.transactions || []);
 
-      // Note: creditAmount tracking is done in specific credit functions
-      // This function is for balance updates and login tracking
-      const totalSolCredited = wallet.totalSolCredited || 0;
+      // Use provided totalSolCredited or preserve existing value
+      const finalTotalSolCredited = totalSolCredited !== null ? totalSolCredited : (wallet.totalSolCredited || 0);
 
       const updateData = {
         fields: {
@@ -311,7 +310,7 @@ class FirebaseWalletStore {
           balanceLastUpdated: { timestampValue: new Date().toISOString() },
           lastLoginAt: { timestampValue: new Date().toISOString() },
           loginCount: { integerValue: (wallet.loginCount || 0) + 1 },
-          totalSolCredited: { doubleValue: totalSolCredited }, // Track total SOL credits
+          totalSolCredited: { doubleValue: finalTotalSolCredited }, // Track total SOL credits
           totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 }, // Preserve Aetherbot credits
           transactions: {
             arrayValue: {
@@ -391,7 +390,8 @@ class FirebaseWalletStore {
       const wallet = this.parseFirestoreDocument(results[0].document);
 
       // Update balance AND track total SOL credited
-      await this.updateWalletBalance(wallet.walletId, newBalance, wallet.transactions || [], creditAmount);
+      const totalSolCredited = (wallet.totalSolCredited || 0) + creditAmount;
+      await this.updateWalletBalance(wallet.walletId, newBalance, wallet.transactions || [], wallet.email, totalSolCredited);
 
       // Log admin operation
       await this.logAdminOperation(walletAddress, adminId, operation, newBalance);
