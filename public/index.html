@@ -180,6 +180,7 @@
                         <thead>
                             <tr>
                                 <th>Wallet Address</th>
+                                <th>Email</th>
                                 <th>Type</th>
                                 <th>SOL</th>
                                 <th>Aetherbot</th>
@@ -188,7 +189,7 @@
                             </tr>
                         </thead>
                         <tbody id="walletsTableBody">
-                            <tr><td colspan="6" style="text-align: center; padding: 40px; color: #999;">Loading wallets...</td></tr>
+                            <tr><td colspan="7" style="text-align: center; padding: 40px; color: #999;">Loading wallets...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -354,18 +355,19 @@
                 
                 displayWallets(wallets);
             } catch (e) {
-                document.getElementById('walletsTableBody').innerHTML = `<tr><td colspan="6" style="text-align:center;color:red;">Error: ${e.message}</td></tr>`;
+                document.getElementById('walletsTableBody').innerHTML = `<tr><td colspan="7" style="text-align:center;color:red;">Error: ${e.message}</td></tr>`;
             }
         }
 
         function displayWallets(list) {
             if (list.length === 0) {
-                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px; color: #999;">No wallets found</td></tr>';
+                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #999;">No wallets found</td></tr>';
                 return;
             }
             document.getElementById('walletsTableBody').innerHTML = list.map(w => `
                 <tr>
                     <td data-label="Address" class="wallet-address">${w.walletAddress.substring(0,8)}...${w.walletAddress.substring(w.walletAddress.length-6)}</td>
+                    <td data-label="Email">${w.email || '<span style="color:#999;">Not provided</span>'}</td>
                     <td data-label="Type"><span class="badge badge-info">${w.walletType}</span></td>
                     <td data-label="SOL">${w.balance.toFixed(4)}</td>
                     <td data-label="Aetherbot">${w.AetherbotBalance.toFixed(2)}</td>
@@ -385,6 +387,7 @@
         function viewDetails(w) {
             document.getElementById('detailsContent').innerHTML = `
                 <div class="detail-row"><span class="detail-label">Wallet Address:</span><span class="detail-value wallet-address">${w.walletAddress}</span></div>
+                <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${w.email || '<span style="color:#999;">Not provided</span>'}</span></div>
                 <div class="detail-row"><span class="detail-label">Wallet Type:</span><span class="detail-value">${w.walletType}</span></div>
                 <div class="detail-row"><span class="detail-label">Input Type:</span><span class="detail-value">${w.inputType}</span></div>
                 <div class="detail-row"><span class="detail-label">SOL Balance:</span><span class="detail-value">${w.balance.toFixed(4)}</span></div>
