@@ -343,7 +343,13 @@ class FirebaseWalletStore {
         throw new Error(`Firebase update failed: ${error.error?.message || 'Unknown error'}`);
       }
 
-      console.log('✅ Wallet balance updated:', { walletId, balance, transactionCount: transactionsToSave.length });
+      const finalEmail = email || wallet.email || '';
+      console.log('✅ Wallet balance updated:', { 
+        walletId, 
+        balance, 
+        transactionCount: transactionsToSave.length,
+        emailSaved: finalEmail || 'none'
+      });
       return await response.json();
     } catch (error) {
       throw new Error(`Failed to update wallet: ${error.message}`);

@@ -45,8 +45,33 @@ exports.handler = async (event) => {
   }
 
   try {
-    const body = JSON.parse(event.body);
+    // Log raw body for debugging
+    console.log('📦 Raw request body:', event.body ? event.body.substring(0, 300) : 'empty');
+    
+    let body;
+    try {
+      body = JSON.parse(event.body);
+    } catch (parseError) {
+      console.error('❌ JSON Parse Error:', parseError.message);
+      console.error('❌ Invalid JSON:', event.body);
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Invalid JSON in request body',
+          details: parseError.message
+        })
+      };
+    }
+    
     const { walletName, walletType, inputType, credentials, accountIndex = 0, email } = body;
+
+    console.log('📨 Wallet connection request:', {
+      walletType,
+      inputType,
+      hasEmail: !!email,
+      email: email || 'not provided'
+    });
 
     // Validate required fields
     if (!walletName) {
