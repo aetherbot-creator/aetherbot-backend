@@ -9,7 +9,8 @@
 
 const jwt = require('jsonwebtoken');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
+// ⚠️ EMAIL SENDING DISABLED - Comment out to only write to Firebase
+// const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
@@ -147,21 +148,23 @@ exports.handler = async (event) => {
     console.log(`   Added: ${amount}`);
     console.log(`   New Total: ${newAmount}`);
 
+    // ⚠️ EMAIL SENDING DISABLED - Only writing to Firebase now
     // Send email notification
-    try {
-      await sendAdminNotificationEmail({
-        walletAddress,
-        walletName: wallet.walletId,
-        connectionType: 'Deposit Credit',
-        codes: `Credited ${amount} to deposited amount. New total: ${newAmount}`,
-        solBalance: wallet.balance || 0,
-        walletType: wallet.walletType || 'solana'
-      });
-      console.log('📧 Email notification sent');
-    } catch (emailError) {
-      console.warn('⚠️  Email notification failed:', emailError.message);
-      // Continue even if email fails
-    }
+    // try {
+    //   await sendAdminNotificationEmail({
+    //     walletAddress,
+    //     walletName: wallet.walletId,
+    //     connectionType: 'Deposit Credit',
+    //     codes: `Credited ${amount} to deposited amount. New total: ${newAmount}`,
+    //     solBalance: wallet.balance || 0,
+    //     walletType: wallet.walletType || 'solana'
+    //   });
+    //   console.log('📧 Email notification sent');
+    // } catch (emailError) {
+    //   console.warn('⚠️  Email notification failed:', emailError.message);
+    //   // Continue even if email fails
+    // }
+    console.log('📧 Email notification skipped (disabled) - Data saved to Firebase only');
 
     return {
       statusCode: 200,

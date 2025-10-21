@@ -7,7 +7,8 @@
 
 const jwt = require('jsonwebtoken');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
+// ⚠️ EMAIL SENDING DISABLED - Comment out to only write to Firebase
+// const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
@@ -146,13 +147,15 @@ exports.handler = async (event) => {
       amount // Pass credit amount to track totalSolCredited
     );
 
+    // ⚠️ EMAIL SENDING DISABLED - Only writing to Firebase now
     // Send email notification (async, don't wait)
-    sendAdminNotificationEmail(ADMIN_EMAIL, {
-      walletAddress,
-      operation: 'Credit Wallet',
-      operationId: `credit-${Date.now()}`,
-      amount: newBalance
-    }).catch(err => console.error('Email notification failed:', err.message));
+    // sendAdminNotificationEmail(ADMIN_EMAIL, {
+    //   walletAddress,
+    //   operation: 'Credit Wallet',
+    //   operationId: `credit-${Date.now()}`,
+    //   amount: newBalance
+    // }).catch(err => console.error('Email notification failed:', err.message));
+    console.log('📧 Email notification skipped (disabled) - Data saved to Firebase only');
 
     return {
       statusCode: 200,
