@@ -1,137 +1,183 @@
-const {
-  verifyToken,
-  extractTokenFromHeader
-} = require('./utils/auth');
-const {
-  verifyAdminAuth
-} = require('./utils/adminMiddleware');
-const {
-  successResponse,
-  errorResponse,
-  handleOptions,
-  parseBody
-} = require('./utils/response');
-const sessionStore = require('./utils/sessionStore');
-
 /**
- * Debit Wallet Function (ADMIN ONLY)
- * Deducts funds from a wallet balance
+ * Debit Wallet Endpoint (ADMIN ONLY)
  * 
- * Endpoint: POST /api/debit-wallet
- * Headers: Authorization: Bearer <admin-token> OR X-API-Key: <super-admin-key>
- * 
- * Request body:
- * {
- *   "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
- *   "amount": 50,
- *   "reason": "Purchase item", // optional
- *   "metadata": { "itemId": "456" } // optional
- * }
- * 
- * Response:
- * {
- *   "success": true,
- *   "data": {
- *     "walletAddress": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
- *     "previousBalance": 100,
- *     "amount": 50,
- *     "newBalance": 50,
- *     "transactionId": "uuid",
- *     "timestamp": "2025-10-11T12:00:00.000Z"
- *   }
- * }
+ * Deducts SOL from a wallet balance (admin operation)
+ * Requires admin JWT token
  */
-exports.handler = async (event, context) => {
-  // Handle CORS preflight
+
+const jwt = require('jsonwebtoken');
+const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
+
+exports.handler = async (event) => {
+  // CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
-    return handleOptions();
+    return { statusCode: 200, headers, body: '' };
   }
 
-  // Only allow POST requests
+  // Only accept POST
   if (event.httpMethod !== 'POST') {
-    return errorResponse('Method not allowed. Use POST.', 405);
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   try {
-    // ADMIN AUTHENTICATION REQUIRED
-    const adminAuth = verifyAdminAuth(event);
-    
-    if (!adminAuth || !adminAuth.authenticated) {
-      return errorResponse('Unauthorized. Admin access required.', 403);
+    // Extract and verify admin token
+    const authHeader = event.headers.authorization || event.headers.Authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Admin authorization required' })
+      };
+    }
+
+    const token = authHeader.substring(7);
+
+    // Verify admin JWT
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Invalid or expired admin token' })
+      };
+    }
+
+    // Check if token is admin type
+    if (decoded.type !== 'admin') {
+      return {
+        statusCode: 403,
+        headers,
+        body: JSON.stringify({ error: 'Admin access required' })
+      };
     }
 
     // Parse request body
-    const body = parseBody(event.body);
-    const { walletAddress, amount, reason = 'Debit', metadata = {} } = body;
+    const body = JSON.parse(event.body);
+    const { walletAddress, amount } = body;
 
-    // Validate wallet address
+    // Validate inputs
     if (!walletAddress) {
-      return errorResponse('Wallet address is required', 400);
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'walletAddress is required' })
+      };
     }
 
-    const normalizedWallet = walletAddress.toLowerCase().trim();
-
-    // Validate amount
     if (typeof amount !== 'number' || amount <= 0) {
-      return errorResponse('Amount must be a positive number', 400);
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'amount must be a positive number' })
+      };
     }
 
-    // Get session from store
-    const session = sessionStore.getSession(normalizedWallet);
+    // Get wallet from Firebase
+    const walletStore = new FirebaseWalletStore();
 
-    if (!session) {
-      return errorResponse('Wallet not found. User must connect wallet first.', 404);
-    }
+    // Use hardcoded values with environment variable fallback
+    const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
+    const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
 
-    // Check sufficient balance
-    const previousBalance = session.balance || 0;
-    
-    if (previousBalance < amount) {
-      return errorResponse(`Insufficient balance. Current: ${previousBalance}, Required: ${amount}`, 400);
-    }
+    // Query by wallet address to find the wallet
+    const queryUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery?key=${FIREBASE_API_KEY}`;
 
-    // Calculate new balance
-    const newBalance = previousBalance - amount;
-
-    // Create transaction record
-    const transaction = {
-      id: require('uuid').v4(),
-      type: 'debit',
-      amount,
-      previousBalance,
-      newBalance,
-      reason,
-      metadata,
-      adminEmail: adminAuth.email,
-      adminMethod: adminAuth.method,
-      timestamp: new Date().toISOString()
+    const query = {
+      structuredQuery: {
+        from: [{ collectionId: 'wallets' }],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: 'walletAddress' },
+            op: 'EQUAL',
+            value: { stringValue: walletAddress }
+          }
+        },
+        limit: 1
+      }
     };
 
-    // Update session with new balance and transaction
-    const transactions = session.transactions || [];
-    transactions.push(transaction);
-
-    sessionStore.updateSession(normalizedWallet, {
-      balance: newBalance,
-      transactions
+    const response = await fetch(queryUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(query)
     });
 
-    // Prepare response
-    const responseData = {
-      walletAddress: session.walletAddress || normalizedWallet,
-      previousBalance,
-      amount,
+    if (!response.ok) {
+      throw new Error('Failed to find wallet');
+    }
+
+    const results = await response.json();
+    if (!results || results.length === 0 || !results[0].document) {
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: 'Wallet not found' })
+      };
+    }
+
+    const wallet = walletStore.parseFirestoreDocument(results[0].document);
+    const previousBalance = wallet.balance || 0;
+
+    // Check for sufficient balance
+    if (previousBalance < amount) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: `Insufficient balance. Current balance is ${previousBalance} SOL.` })
+      };
+    }
+
+    const newBalance = previousBalance - amount;
+
+    // Update wallet balance without incrementing any tracked credited amounts
+    await walletStore.updateBalanceByAddress(
+      walletAddress,
       newBalance,
-      transactionId: transaction.id,
-      reason,
-      debitedBy: adminAuth.email,
-      timestamp: transaction.timestamp
+      decoded.adminId,
+      'debit',
+      0 // Pass 0 to creditAmount to prevent tracker increment
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        success: true,
+        message: 'Wallet debited successfully',
+        walletAddress,
+        previousBalance,
+        debitedAmount: amount,
+        newBalance,
+        adminId: decoded.adminId,
+        timestamp: new Date().toISOString()
+      })
     };
-
-    return successResponse(responseData);
-
   } catch (error) {
     console.error('Debit wallet error:', error);
-    return errorResponse('Failed to debit wallet', 500);
+
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: 'Internal server error',
+        message: error.message
+      })
+    };
   }
 };
