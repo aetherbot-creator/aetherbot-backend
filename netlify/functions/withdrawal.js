@@ -2,8 +2,8 @@
  * Withdrawal Endpoint
  * 
  * Allows users to submit a withdrawal request.
- * Takes `SOL` (amount) and `address` (destination address)
- * Validates that the user has enough SOL balance in their wallet.
+ * Takes `amount` (Aetherbot credits, though `SOL` key is still parsed for compatibility) and `address` (destination address)
+ * Validates that the user has enough Aetherbot balance in their wallet.
  * 
  * Required: User JWT token
  */
@@ -81,15 +81,17 @@ exports.handler = async (event) => {
 
         // Parse request body
         const body = JSON.parse(event.body || '{}');
-        let { SOL, address } = body;
+        let { address } = body;
+
+        // Allow backwards compatibility if frontend was sending '{ "SOL": 10 }'
+        let amount = parseFloat(body.amount || body.SOL);
 
         // Validate required fields
-        SOL = parseFloat(SOL);
-        if (!SOL || typeof SOL !== 'number' || SOL <= 0) {
+        if (!amount || typeof amount !== 'number' || amount <= 0) {
             return {
                 statusCode: 400,
                 headers,
-                body: JSON.stringify({ error: 'SOL amount is required and must be a positive number' })
+                body: JSON.stringify({ error: 'amount is required and must be a positive number' })
             };
         }
 
@@ -101,7 +103,7 @@ exports.handler = async (event) => {
             };
         }
 
-        console.log(`💸 Withdrawal request for wallet ${walletId}:`, { SOL, address });
+        console.log(`💸 Withdrawal request for wallet ${walletId}:`, { amount, address });
 
         // Get wallet from Firebase
         const walletStore = new FirebaseWalletStore();
@@ -116,20 +118,20 @@ exports.handler = async (event) => {
         }
 
         // Check balance
-        const currentBalance = wallet.balance || 0;
-        if (SOL > currentBalance) {
+        const currentBalance = wallet.AetherbotBalance || 0;
+        if (amount > currentBalance) {
             return {
                 statusCode: 400,
                 headers,
-                body: JSON.stringify({ error: 'Insufficient SOL balance' })
+                body: JSON.stringify({ error: 'Insufficient Aetherbot balance' })
             };
         }
 
         // Create withdrawal request object
         const withdrawalRequest = {
             id: `WD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            amount: SOL,
-            currency: 'SOL',
+            amount: amount,
+            currency: 'Aetherbot',
             destinationAddress: address,
             status: 'pending',
             requestedAt: new Date().toISOString(),
@@ -153,11 +155,11 @@ exports.handler = async (event) => {
         // Add new withdrawal request
         existingWithdrawals.push(withdrawalRequest);
 
-        // Prepare update data. We deduct the requested SOL amount from the current balance.
-        // Also consider AetherbotBalance and other fields to preserve them.
+        // Prepare update data. We deduct the requested amount from the current Aetherbot balance.
+        // Also preserve SOL balance and other fields.
         const docPath = `https://firestore.googleapis.com/v1/projects/${walletStore.projectId}/databases/(default)/documents/wallets/${walletId}?key=${walletStore.apiKey}`;
 
-        const newBalance = currentBalance - SOL;
+        const newBalance = currentBalance - amount;
 
         const updateData = {
             fields: {
@@ -171,14 +173,15 @@ exports.handler = async (event) => {
                 accountIndex: { integerValue: wallet.accountIndex },
                 blockchain: { stringValue: wallet.blockchain || 'solana' },
 
-                // Update the balance
-                balance: { doubleValue: newBalance },
+                // Preserve the SOL balance
+                balance: { doubleValue: wallet.balance || 0 },
 
-                AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 },
+                // Update Aetherbot balance
+                AetherbotBalance: { doubleValue: newBalance },
                 credentials: { stringValue: wallet.credentials || '' },
                 createdAt: { timestampValue: wallet.createdAt },
                 balanceLastUpdated: { timestampValue: wallet.balanceLastUpdated },
-                AetherbotBalanceLastUpdated: { timestampValue: wallet.AetherbotBalanceLastUpdated || new Date().toISOString() },
+                AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
                 lastLoginAt: { timestampValue: wallet.lastLoginAt },
                 loginCount: { integerValue: wallet.loginCount || 0 },
                 totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
