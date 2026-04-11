@@ -99,6 +99,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         success: true,
+        token, // Added to root for backward compatibility with cached frontends
         data: {
           token,
           email: email,

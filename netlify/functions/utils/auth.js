@@ -58,6 +58,11 @@ const verifyToken = (token) => {
     const secret = getJwtSecret();
     if (!secret) return { verified: false, error: 'JWT_SECRET missing in environment' };
     
+    // Quick validation to prevent crashing on obvious bad tokens
+    if (typeof token !== 'string' || token.split('.').length !== 3) {
+      return { verified: false, error: 'jwt malformed' };
+    }
+
     const decoded = jwt.verify(token, secret);
     return { verified: true, decoded };
   } catch (error) {
@@ -100,11 +105,12 @@ const extractTokenFromHeader = (headers) => {
   }
 
   // Support both "Bearer token" and just "token"
+  let token = authHeader;
   if (authHeader.startsWith('Bearer ')) {
-    return authHeader.substring(7);
+    token = authHeader.substring(7);
   }
   
-  return authHeader;
+  return token.trim();
 };
 
 /**
@@ -222,7 +228,7 @@ const verifyAdminToken = (token) => {
  * @returns {object} Result object with success status and error details
  */
 const validateAdminCredentials = (email, password) => {
-  const adminEmail = process.env.ADMIN_EMAIL ? process.env.ADMIN_EMAIL.trim() : null;
+  const adminEmail = (process.env.ADMIN_EMAIL || process.env.ADMIN_USERNAME || '').trim() || null;
   const adminPassword = process.env.ADMIN_PASSWORD ? process.env.ADMIN_PASSWORD.trim() : null;
   
   if (!adminEmail || !adminPassword) {
@@ -243,18 +249,10 @@ const validateAdminCredentials = (email, password) => {
     return { success: true };
   }
 
-  // Diagnostic hints for the user (without revealing secrets)
-  let diagnostic = 'Invalid credentials.';
-  if (!isEmailMatch) {
-    diagnostic += ` Email mismatch (Input: ${inputEmail.length} chars, Env: ${adminEmail.length} chars).`;
-  }
-  if (!isPasswordMatch) {
-    diagnostic += ` Password mismatch (Input: ${inputPassword.length} chars, Env: ${adminPassword.length} chars).`;
-  }
-
+  // Security: Provide a generic error message
   return { 
     success: false, 
-    error: diagnostic
+    error: 'Invalid email or password.'
   };
 };
 
@@ -264,7 +262,7 @@ const validateAdminCredentials = (email, password) => {
  */
 const getAdminConfigStatus = () => {
   return {
-    emailSet: !!process.env.ADMIN_EMAIL,
+    emailSet: !!(process.env.ADMIN_EMAIL || process.env.ADMIN_USERNAME),
     passwordSet: !!process.env.ADMIN_PASSWORD,
     jwtSecretSet: !!process.env.JWT_SECRET,
     superAdminKeySet: !!(process.env.SUPER_ADMIN_API_KEY || process.env.ADMIN_API_KEY)
@@ -295,6 +293,8 @@ module.exports = {
   extractTokenFromHeader,
   generateAnonymousName,
   validateWalletAddress,
+  generateAdminToken,
+  verifyAdminToken,
   validateAdminCredentials,
   verifySuperAdminApiKey,
   getJwtSecret,

@@ -569,7 +569,7 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    token = data.token;
+                    token = data.data.token;
                     localStorage.setItem('adminToken', token);
                     loadDashboard();
                 } else {
