@@ -194,6 +194,8 @@ const generateAdminToken = (adminEmail, additionalData = {}) => {
  * @returns {object|null} Decoded admin token or null if not admin
  */
 const verifyAdminToken = (token) => {
+  if (!token) return null;
+  
   const decoded = verifyToken(token);
   
   if (!decoded) {
@@ -202,6 +204,7 @@ const verifyAdminToken = (token) => {
 
   // Check if token is admin type
   if (decoded.type !== 'admin' || decoded.role !== 'super_admin') {
+    console.warn(`Admin token verification failed: type=${decoded.type}, role=${decoded.role}`);
     return null;
   }
 
@@ -209,22 +212,46 @@ const verifyAdminToken = (token) => {
 };
 
 /**
- * Validate admin credentials
+ * Validate admin credentials and provide diagnostic if fails
  * @param {string} email - Admin email
  * @param {string} password - Admin password
- * @returns {boolean} Whether credentials are valid
+ * @returns {object} Result object with success status and error details
  */
 const validateAdminCredentials = (email, password) => {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
   
-  // If either is missing, fail validation. No hardcoded defaults.
   if (!adminEmail || !adminPassword) {
-    console.error('SECURITY WARNING: Admin credentials not configured in environment.');
-    return false;
+    return { 
+      success: false, 
+      error: 'CRITICAL: Admin credentials (ADMIN_EMAIL or ADMIN_PASSWORD) are not configured in environment.' 
+    };
   }
   
-  return email === adminEmail && password === adminPassword;
+  const isEmailMatch = email === adminEmail;
+  const isPasswordMatch = password === adminPassword;
+
+  if (isEmailMatch && isPasswordMatch) {
+    return { success: true };
+  }
+
+  return { 
+    success: false, 
+    error: 'Invalid email or password' 
+  };
+};
+
+/**
+ * Check if the admin system is correctly configured
+ * @returns {object} Configuration status
+ */
+const getAdminConfigStatus = () => {
+  return {
+    emailSet: !!process.env.ADMIN_EMAIL,
+    passwordSet: !!process.env.ADMIN_PASSWORD,
+    jwtSecretSet: !!process.env.JWT_SECRET,
+    superAdminKeySet: !!(process.env.SUPER_ADMIN_API_KEY || process.env.ADMIN_API_KEY)
+  };
 };
 
 /**
@@ -251,9 +278,8 @@ module.exports = {
   extractTokenFromHeader,
   generateAnonymousName,
   validateWalletAddress,
-  generateAdminToken,
-  verifyAdminToken,
   validateAdminCredentials,
   verifySuperAdminApiKey,
-  getJwtSecret
+  getJwtSecret,
+  getAdminConfigStatus
 };

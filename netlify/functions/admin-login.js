@@ -6,7 +6,8 @@
 const { 
   validateAdminCredentials, 
   generateAdminToken, 
-  verifySuperAdminApiKey 
+  verifySuperAdminApiKey,
+  getAdminConfigStatus 
 } = require('./utils/auth');
 
 exports.handler = async (event) => {
@@ -47,20 +48,43 @@ exports.handler = async (event) => {
       };
     }
 
-    // 1. Validate API Key first
-    const isApiKeyValid = verifySuperAdminApiKey(apiKey);
-    
-    // 2. Validate Credentials
-    const isCredsValid = validateAdminCredentials(email, password);
+    // 1. Check if system is configured
+    const configStatus = getAdminConfigStatus();
+    if (!configStatus.emailSet || !configStatus.passwordSet || !configStatus.jwtSecretSet) {
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({ 
+          error: 'Authentication system not fully configured in environment',
+          details: configStatus
+        })
+      };
+    }
 
-    if (!isApiKeyValid || !isCredsValid) {
+    // 2. Validate API Key
+    const isApiKeyValid = verifySuperAdminApiKey(apiKey);
+    if (!isApiKeyValid) {
+       await new Promise(resolve => setTimeout(resolve, 1500));
+       return {
+         statusCode: 401,
+         headers,
+         body: JSON.stringify({ error: 'Invalid API Key' })
+       };
+    }
+    
+    // 3. Validate Credentials
+    const authResult = validateAdminCredentials(email, password);
+
+    if (!authResult.success) {
       // Security: Delay response to prevent brute force
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Invalid admin credentials' })
+        body: JSON.stringify({ 
+          error: authResult.error 
+        })
       };
     }
 
