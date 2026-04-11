@@ -50,15 +50,20 @@ exports.handler = async (event) => {
     const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
 
     // Verify admin JWT using helper
-    const decoded = verifyAdminToken(token);
+    const authResult = verifyAdminToken(token);
     
-    if (!decoded) {
+    if (!authResult.verified) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Invalid, expired, or unauthorized admin token' })
+        body: JSON.stringify({ 
+          error: 'Unauthorized admin access',
+          reason: authResult.error 
+        })
       };
     }
+
+    const decoded = authResult.decoded;
 
     console.log('📋 Admin fetching all wallets...');
 

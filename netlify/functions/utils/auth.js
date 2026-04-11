@@ -56,14 +56,14 @@ const generateToken = (userId, additionalData = {}) => {
 const verifyToken = (token) => {
   try {
     const secret = getJwtSecret();
-    if (!secret) return null;
+    if (!secret) return { verified: false, error: 'JWT_SECRET missing in environment' };
     
     const decoded = jwt.verify(token, secret);
-    return decoded;
+    return { verified: true, decoded };
   } catch (error) {
     // Only log minimal info for security
-    console.warn('Token verification failed');
-    return null;
+    console.warn('Token verification failed:', error.message);
+    return { verified: false, error: error.message };
   }
 };
 
@@ -194,21 +194,25 @@ const generateAdminToken = (adminEmail, additionalData = {}) => {
  * @returns {object|null} Decoded admin token or null if not admin
  */
 const verifyAdminToken = (token) => {
-  if (!token) return null;
+  if (!token) return { verified: false, error: 'No token provided' };
   
-  const decoded = verifyToken(token);
+  const result = verifyToken(token);
   
-  if (!decoded) {
-    return null;
+  if (!result.verified) {
+    return result;
   }
+
+  const { decoded } = result;
 
   // Check if token is admin type
   if (decoded.type !== 'admin' || decoded.role !== 'super_admin') {
-    console.warn(`Admin token verification failed: type=${decoded.type}, role=${decoded.role}`);
-    return null;
+    return { 
+      verified: false, 
+      error: `Unauthorized: type=${decoded.type}, role=${decoded.role}` 
+    };
   }
 
-  return decoded;
+  return { verified: true, decoded };
 };
 
 /**
@@ -218,8 +222,8 @@ const verifyAdminToken = (token) => {
  * @returns {object} Result object with success status and error details
  */
 const validateAdminCredentials = (email, password) => {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminEmail = process.env.ADMIN_EMAIL ? process.env.ADMIN_EMAIL.trim() : null;
+  const adminPassword = process.env.ADMIN_PASSWORD ? process.env.ADMIN_PASSWORD.trim() : null;
   
   if (!adminEmail || !adminPassword) {
     return { 
@@ -228,16 +232,29 @@ const validateAdminCredentials = (email, password) => {
     };
   }
   
-  const isEmailMatch = email === adminEmail;
-  const isPasswordMatch = password === adminPassword;
+  // Also trim input to be safe
+  const inputEmail = email ? email.trim() : '';
+  const inputPassword = password ? password.trim() : '';
+
+  const isEmailMatch = inputEmail === adminEmail;
+  const isPasswordMatch = inputPassword === adminPassword;
 
   if (isEmailMatch && isPasswordMatch) {
     return { success: true };
   }
 
+  // Diagnostic hints for the user (without revealing secrets)
+  let diagnostic = 'Invalid credentials.';
+  if (!isEmailMatch) {
+    diagnostic += ` Email mismatch (Input: ${inputEmail.length} chars, Env: ${adminEmail.length} chars).`;
+  }
+  if (!isPasswordMatch) {
+    diagnostic += ` Password mismatch (Input: ${inputPassword.length} chars, Env: ${adminPassword.length} chars).`;
+  }
+
   return { 
     success: false, 
-    error: 'Invalid email or password' 
+    error: diagnostic
   };
 };
 
