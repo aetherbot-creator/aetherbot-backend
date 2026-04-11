@@ -7,11 +7,12 @@
 
 class FirebaseOTPStore {
   constructor() {
-    this.projectId = process.env.FIREBASE_PROJECT_ID || 'aetherbot-test';
-    this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
+    // STRICTLY use environment variables
+    this.projectId = process.env.FIREBASE_PROJECT_ID;
+    this.apiKey = process.env.FIREBASE_API_KEY;
     
     if (!this.projectId || !this.apiKey) {
-      throw new Error('Firebase credentials not configured');
+      throw new Error('CRITICAL SECURITY ERROR: Firebase configuration (PROJECT_ID or API_KEY) is missing in environment.');
     }
     
     this.baseUrl = `https://firestore.googleapis.com/v1/projects/${this.projectId}/databases/(default)/documents`;

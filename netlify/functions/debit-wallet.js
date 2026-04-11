@@ -5,10 +5,8 @@
  * Requires admin JWT token
  */
 
-const jwt = require('jsonwebtoken');
+const { verifyAdminToken } = require('./utils/auth');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
 
 exports.handler = async (event) => {
   // CORS headers
@@ -36,7 +34,7 @@ exports.handler = async (event) => {
   try {
     // Extract and verify admin token
     const authHeader = event.headers.authorization || event.headers.Authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader) {
       return {
         statusCode: 401,
         headers,
@@ -44,26 +42,16 @@ exports.handler = async (event) => {
       };
     }
 
-    const token = authHeader.substring(7);
+    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
 
-    // Verify admin JWT
-    let decoded;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch (error) {
+    // Verify admin JWT using helper
+    const decoded = verifyAdminToken(token);
+    
+    if (!decoded) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Invalid or expired admin token' })
-      };
-    }
-
-    // Check if token is admin type
-    if (decoded.type !== 'admin') {
-      return {
-        statusCode: 403,
-        headers,
-        body: JSON.stringify({ error: 'Admin access required' })
+        body: JSON.stringify({ error: 'Invalid, expired, or unauthorized admin token' })
       };
     }
 
@@ -91,9 +79,18 @@ exports.handler = async (event) => {
     // Get wallet from Firebase
     const walletStore = new FirebaseWalletStore();
 
-    // Use hardcoded values with environment variable fallback
-    const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID || 'Aetherbottest';
-    const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
+    // STRICTLY use environment variables
+    const FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID;
+    const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+
+    if (!FIREBASE_PROJECT_ID || !FIREBASE_API_KEY) {
+      console.error('CRITICAL: Firebase configuration missing in environment.');
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: 'Server misconfigured: Missing Firebase credentials' })
+      };
+    }
 
     // Query by wallet address to find the wallet
     const queryUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery?key=${FIREBASE_API_KEY}`;

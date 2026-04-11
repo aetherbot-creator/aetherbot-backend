@@ -7,13 +7,8 @@
  * Required: Admin JWT token
  */
 
-const jwt = require('jsonwebtoken');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-// ⚠️ EMAIL SENDING DISABLED - Comment out to only write to Firebase
-// const { sendAdminNotificationEmail } = require('./utils/loopsEmail');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@aetherbot.app';
+const { verifyAdminToken } = require('./utils/auth');
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -42,45 +37,26 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Verify admin JWT token
     const authHeader = event.headers.authorization || event.headers.Authorization;
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ 
-          error: 'Missing authorization token',
-          message: 'Admin access required'
-        })
+        body: JSON.stringify({ error: 'Admin authorization required' })
       };
     }
 
-    const token = authHeader.substring(7);
+    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
+
+    // Verify admin JWT using helper
+    const decoded = verifyAdminToken(token);
     
-    let decoded;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch (error) {
+    if (!decoded) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ 
-          error: 'Invalid or expired token',
-          message: 'Please login again'
-        })
-      };
-    }
-
-    // Verify admin role
-    if (!decoded.isAdmin) {
-      return {
-        statusCode: 403,
-        headers,
-        body: JSON.stringify({ 
-          error: 'Forbidden',
-          message: 'Admin access required'
-        })
+        body: JSON.stringify({ error: 'Invalid, expired, or unauthorized admin token' })
       };
     }
 
@@ -107,12 +83,6 @@ exports.handler = async (event) => {
 
     console.log(`💰 Crediting ${amount} deposited amount to wallet: ${walletAddress}`);
     
-    // Firebase configuration with hardcoded values
-    console.log('🔧 Firebase Config:');
-    console.log('   Project ID: Aetherbottest');
-    console.log('   API Key: ✅ Set');
-    console.log('   Source: Hardcoded (Local Dev)');
-
     // Get wallet from Firebase
     const walletStore = new FirebaseWalletStore();
     

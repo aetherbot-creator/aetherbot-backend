@@ -1,9 +1,16 @@
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
-// Secret key for JWT signing (should be loaded from environment variables)
+// Secret key for JWT signing (STRICTLY from environment variables)
 const getJwtSecret = () => {
-  return process.env.JWT_SECRET || 'your-super-secret-key-change-in-production';
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('CRITICAL SECURITY ERROR: JWT_SECRET environment variable is missing.');
+    // In production, we should not have a fallback. 
+    // If the variable is missing, token verification will fail, which is the secure behavior.
+    return null;
+  }
+  return secret;
 };
 
 /**
@@ -22,6 +29,10 @@ const generateUserId = () => {
  */
 const generateToken = (userId, additionalData = {}) => {
   const secret = getJwtSecret();
+  if (!secret) {
+    throw new Error('Authentication system misconfigured: Missing secret');
+  }
+  
   const timestamp = Date.now();
   
   const payload = {
@@ -45,10 +56,13 @@ const generateToken = (userId, additionalData = {}) => {
 const verifyToken = (token) => {
   try {
     const secret = getJwtSecret();
+    if (!secret) return null;
+    
     const decoded = jwt.verify(token, secret);
     return decoded;
   } catch (error) {
-    console.error('Token verification failed:', error.message);
+    // Only log minimal info for security
+    console.warn('Token verification failed');
     return null;
   }
 };
@@ -60,6 +74,9 @@ const verifyToken = (token) => {
  */
 const generateRefreshToken = (userId) => {
   const secret = getJwtSecret();
+  if (!secret) {
+    throw new Error('Authentication system misconfigured: Missing secret');
+  }
   
   const payload = {
     userId,
@@ -151,6 +168,10 @@ const validateWalletAddress = (walletAddress, chain = 'ethereum') => {
  */
 const generateAdminToken = (adminEmail, additionalData = {}) => {
   const secret = getJwtSecret();
+  if (!secret) {
+    throw new Error('Admin authentication misconfigured: Missing secret');
+  }
+  
   const timestamp = Date.now();
   
   const payload = {
@@ -194,8 +215,14 @@ const verifyAdminToken = (token) => {
  * @returns {boolean} Whether credentials are valid
  */
 const validateAdminCredentials = (email, password) => {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@Aetherbot.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  
+  // If either is missing, fail validation. No hardcoded defaults.
+  if (!adminEmail || !adminPassword) {
+    console.error('SECURITY WARNING: Admin credentials not configured in environment.');
+    return false;
+  }
   
   return email === adminEmail && password === adminPassword;
 };
@@ -206,9 +233,10 @@ const validateAdminCredentials = (email, password) => {
  * @returns {boolean} Whether API key is valid
  */
 const verifySuperAdminApiKey = (apiKey) => {
-  const superAdminKey = process.env.SUPER_ADMIN_API_KEY;
+  // Check both SUPER_ADMIN_API_KEY and general ADMIN_API_KEY for compatibility
+  const superAdminKey = process.env.SUPER_ADMIN_API_KEY || process.env.ADMIN_API_KEY;
   
-  if (!superAdminKey) {
+  if (!superAdminKey || !apiKey) {
     return false;
   }
   

@@ -5,10 +5,8 @@
  * Requires admin JWT token
  */
 
-const jwt = require('jsonwebtoken');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
+const { verifyAdminToken } = require('./utils/auth');
 
 exports.handler = async (event) => {
   // CORS headers
@@ -36,7 +34,7 @@ exports.handler = async (event) => {
   try {
     // Extract admin token
     const authHeader = event.headers.authorization || event.headers.Authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader) {
       return {
         statusCode: 401,
         headers,
@@ -44,25 +42,16 @@ exports.handler = async (event) => {
       };
     }
 
-    const token = authHeader.substring(7);
+    const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
 
-    // Verify admin token
-    let decoded;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-      
-      if (decoded.role !== 'super_admin') {
-        return {
-          statusCode: 403,
-          headers,
-          body: JSON.stringify({ error: 'Admin access required' })
-        };
-      }
-    } catch (error) {
+    // Verify admin JWT using helper
+    const decoded = verifyAdminToken(token);
+    
+    if (!decoded) {
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Invalid or expired admin token' })
+        body: JSON.stringify({ error: 'Invalid, expired, or unauthorized admin token' })
       };
     }
 

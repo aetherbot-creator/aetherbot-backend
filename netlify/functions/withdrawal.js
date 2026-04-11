@@ -10,8 +10,9 @@
 
 const jwt = require('jsonwebtoken');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
+const { getJwtSecret } = require('./utils/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
+const JWT_SECRET = getJwtSecret();
 
 const headers = {
     'Access-Control-Allow-Origin': '*',

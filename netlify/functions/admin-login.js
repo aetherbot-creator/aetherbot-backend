@@ -1,38 +1,19 @@
 /**
  * Admin Login Function
- * Authenticates admin users with username/password and returns admin JWT token
- * 
- * Endpoint: POST /api/admin/login
- * 
- * Request body:
- * {
- *   "username": "admin",
- *   "password": "your-secure-password",
- *   "apiKey": "your-admin-api-key"
- * }
- * 
- * Response:
- * {
- *   "success": true,
- *   "token": "admin-jwt-token",
- *   "adminId": "admin",
- *   "role": "super_admin",
- *   "expiresIn": "24h"
- * }
+ * Authenticates admin users with email/password and returns admin JWT token
  */
 
-const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || 'super-secret-admin-key';
+const { 
+  validateAdminCredentials, 
+  generateAdminToken, 
+  verifySuperAdminApiKey 
+} = require('./utils/auth');
 
 exports.handler = async (event) => {
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-API-Key',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
   };
@@ -53,51 +34,54 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const { username, password, apiKey } = body;
+    // Support both 'email' and 'username' for backward compatibility
+    const email = body.email || body.username;
+    const { password, apiKey } = body;
 
     // Validate input
-    if (!username || !password || !apiKey) {
+    if (!email || !password || !apiKey) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Username, password, and apiKey are required' })
+        body: JSON.stringify({ error: 'Email/Username, password, and apiKey are required' })
       };
     }
 
-    // Validate credentials
-    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD || apiKey !== ADMIN_API_KEY) {
-      // Delay response to prevent brute force
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    // 1. Validate API Key first
+    const isApiKeyValid = verifySuperAdminApiKey(apiKey);
+    
+    // 2. Validate Credentials
+    const isCredsValid = validateAdminCredentials(email, password);
+
+    if (!isApiKeyValid || !isCredsValid) {
+      // Security: Delay response to prevent brute force
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       return {
         statusCode: 401,
         headers,
-        body: JSON.stringify({ error: 'Invalid credentials' })
+        body: JSON.stringify({ error: 'Invalid admin credentials' })
       };
     }
 
     // Generate admin JWT token
-    const token = jwt.sign(
-      {
-        adminId: username,
-        role: 'super_admin',
-        type: 'admin',
-        isAdmin: true
-      },
-      JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    const token = generateAdminToken(email, {
+      adminId: email,
+      loginAt: new Date().toISOString()
+    });
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         success: true,
-        token,
-        adminId: username,
-        role: 'super_admin',
-        expiresIn: '24h',
-        loginAt: new Date().toISOString()
+        data: {
+          token,
+          email: email,
+          role: 'super_admin',
+          expiresIn: '24h',
+          loginAt: new Date().toISOString()
+        }
       })
     };
   } catch (error) {
@@ -108,7 +92,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         error: 'Internal server error',
-        message: error.message
+        message: 'An error occurred during authentication'
       })
     };
   }

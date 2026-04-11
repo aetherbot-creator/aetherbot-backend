@@ -33,22 +33,14 @@
 
 class FirebaseWalletStore {
   constructor() {
-    // Use environment variables with hardcoded fallback for local development
-    this.projectId = process.env.FIREBASE_PROJECT_ID || 'aetherbot-test';
-    this.apiKey = process.env.FIREBASE_API_KEY || 'AIzaSyDpqTgOny5WGi8EU6djUbqvjDBoLijvsso';
+    // STRICTLY use environment variables
+    this.projectId = process.env.FIREBASE_PROJECT_ID;
+    this.apiKey = process.env.FIREBASE_API_KEY;
     
     // Validate that we have values
-    if (!this.projectId) {
-      throw new Error('FIREBASE_PROJECT_ID is not set');
+    if (!this.projectId || !this.apiKey) {
+      throw new Error('CRITICAL SECURITY ERROR: Firebase configuration (PROJECT_ID or API_KEY) is missing in environment.');
     }
-    if (!this.apiKey) {
-      throw new Error('FIREBASE_API_KEY is not set');
-    }
-    
-    console.log('🔧 Firebase Config:');
-    console.log('   Project ID:', this.projectId);
-    console.log('   API Key:', this.apiKey ? '✅ Set' : '❌ Missing');
-    console.log('   Source:', process.env.FIREBASE_PROJECT_ID ? 'Environment Variable' : 'Hardcoded (Local Dev)');
     
     this.baseUrl = `https://firestore.googleapis.com/v1/projects/${this.projectId}/databases/(default)/documents`;
   }

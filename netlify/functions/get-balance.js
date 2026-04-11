@@ -8,8 +8,9 @@
 const jwt = require('jsonwebtoken');
 const { createRPCInstance } = require('./utils/solanaRPC');
 const { FirebaseWalletStore } = require('./utils/firebaseWalletStore');
+const { getJwtSecret, verifyToken } = require('./utils/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
+const JWT_SECRET = getJwtSecret();
 
 exports.handler = async (event) => {
   // CORS headers
@@ -47,11 +48,9 @@ exports.handler = async (event) => {
 
     const token = authHeader.substring(7);
 
-    // Verify JWT token
-    let decoded;
-    try {
-      decoded = jwt.verify(token, JWT_SECRET);
-    } catch (error) {
+    // Verify JWT token using helper
+    const decoded = verifyToken(token);
+    if (!decoded) {
       return {
         statusCode: 401,
         headers,
