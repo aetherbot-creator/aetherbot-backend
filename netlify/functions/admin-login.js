@@ -37,14 +37,13 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body);
     // Support both 'email' and 'username' for backward compatibility
     const email = body.email || body.username;
-    const { password, apiKey } = body;
-
+   const { password } = body;
     // Validate input
-    if (!email || !password || !apiKey) {
+   if (!email || !password) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Email/Username, password, and apiKey are required' })
+        body: JSON.stringify({ error: 'Email/Username and password are required' })
       };
     }
 
@@ -61,16 +60,8 @@ exports.handler = async (event) => {
       };
     }
 
-    // 2. Validate API Key
-    const isApiKeyValid = verifySuperAdminApiKey(apiKey);
-    if (!isApiKeyValid) {
-       await new Promise(resolve => setTimeout(resolve, 1500));
-       return {
-         statusCode: 401,
-         headers,
-         body: JSON.stringify({ error: 'Invalid API Key' })
-       };
-    }
+   
+
     
     // 3. Validate Credentials
     const authResult = validateAdminCredentials(email, password);
