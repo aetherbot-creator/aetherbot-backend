@@ -377,7 +377,7 @@
                 <label>Password</label>
                 <input type="password" id="password" required>
             </div>
-            <!-- API Key is handled automatically in the background -->
+
             <button type="submit" class="btn">Login</button>
         </form>
     </div>
@@ -562,9 +562,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         username: document.getElementById('username').value,
-                        password: document.getElementById('password').value,
-                        // Hardcoded for convenience (Security Warning: Visible in source code)
-                        apiKey: "super-secret-admin-key" 
+                        password: document.getElementById('password').value
                     })
                 });
                 const data = await res.json();
