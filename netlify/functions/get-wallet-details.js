@@ -129,6 +129,7 @@ exports.handler = async (event) => {
       // Auto snipe and trade counters
       autoSnipeBot: wallet.autoSnipeBot || 0,
       totalTrade: wallet.totalTrade || 0,
+      botStatus: wallet.botStatus || 'paused',
       
       // Withdrawal requests
       withdrawal: wallet.withdrawal ? (wallet.withdrawal.trim() !== '' ? JSON.parse(wallet.withdrawal) : []) : [],
