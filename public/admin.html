@@ -210,6 +210,33 @@
             color: #333;
         }
 
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: .3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+        input:checked + .toggle-slider { background-color: #28a745; }
+        input:checked + .toggle-slider:before { transform: translateX(22px); }
+
         .btn-debit-snipe {
             background: #dc3545;
             color: white;
@@ -419,6 +446,7 @@
                                     <th>SOL</th>
                                     <th>Aetherbot</th>
                                     <th>Logins</th>
+                                    <th>Bot</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -644,7 +672,7 @@
 
         function displayWallets(list) {
             if (list.length === 0) {
-                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">No wallets</td></tr>';
+                document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="8" style="text-align:center;">No wallets</td></tr>';
                 return;
             }
             document.getElementById('walletsTableBody').innerHTML = list.map(w => `
@@ -655,6 +683,12 @@
                     <td>${w.balance.toFixed(4)}</td>
                     <td>${w.AetherbotBalance.toFixed(2)}</td>
                     <td>${w.loginCount}</td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${w.botStatus === 'running' ? 'checked' : ''} onchange="toggleBot('${w.walletId}', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </td>
                     <td style="display:flex;gap:5px;">
                         <button class="btn-small btn-view" onclick='viewDetails(${JSON.stringify(w)})'>View</button>
                         <button class="btn-small btn-credit-sol" onclick='openCreditSol("${w.walletAddress}")'>+ SOL</button>
@@ -827,6 +861,27 @@
                 document.getElementById('debitSnipeAlert').innerHTML = `<div class="alert alert-error">Error: ${e.message}</div>`;
             }
         });
+
+        async function toggleBot(walletId, isActive) {
+            try {
+                const botStatus = isActive ? 'running' : 'paused';
+                const res = await fetch(`${API}/admin-toggle-bot`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ walletId, botStatus })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(`Failed to update bot status: ${data.error}`);
+                    loadWallets(); // Reload to reset toggle
+                } else {
+                    console.log(`✅ Bot ${botStatus} for wallet ${walletId}`);
+                }
+            } catch (e) {
+                alert(`Error: ${e.message}`);
+                loadWallets();
+            }
+        }
 
         function filterWallets() {
             const term = document.getElementById('searchBox').value.toLowerCase();
