@@ -683,5 +683,37 @@ class FirebaseWalletStore {
     }
   }
 }
+/**
+   * Update bot status (running or paused)
+   */
+  async updateBotStatus(walletId, botStatus) {
+    try {
+      const wallet = await this.getWalletById(walletId);
+      if (!wallet) throw new Error('Wallet not found');
 
+      const docPath = `${this.baseUrl}/wallets/${walletId}?key=${this.apiKey}&updateMask.fieldPaths=botStatus`;
+
+      const updateData = {
+        fields: {
+          botStatus: { stringValue: botStatus }
+        }
+      };
+
+      const response = await fetch(docPath, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`Firebase update failed: ${error.error?.message || 'Unknown error'}`);
+      }
+
+      console.log(`✅ Bot status updated: ${walletId} -> ${botStatus}`);
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Failed to update bot status: ${error.message}`);
+    }
+  }
 module.exports = { FirebaseWalletStore };
