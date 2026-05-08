@@ -22,7 +22,7 @@
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
         .btn-success { background: #28a745; }
         .table-container { background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; }
-        .table-header { padding: 25px 30px; border-bottom: 2px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .table-header { padding: 25px 30px; border-bottom: 2px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .search-box { padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; width: 300px; }
         table { width: 100%; border-collapse: collapse; }
         thead { background: #f8f9fa; }
@@ -56,9 +56,12 @@
         .alert-error { background: #f8d7da; color: #721c24; }
         .logout-btn { background: #dc3545; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
         .credentials-box { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; word-break: break-all; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: white; border: none; padding: 12px 25px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #666; transition: all 0.3s ease; }
-        .tab-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: white; border: none; padding: 12px 22px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); color: #666; transition: all 0.3s ease; }
+        .tab-btn.active-wallets, .tab-btn.active-withdrawals { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .tab-btn.active-sta { background: linear-gradient(135deg, #00c853 0%, #00897b 100%); color: white; box-shadow: 0 5px 20px rgba(0,200,83,0.4); }
+        .tab-btn.active-stp { background: linear-gradient(135deg, #ff1744 0%, #c62828 100%); color: white; box-shadow: 0 5px 20px rgba(255,23,68,0.4); }
+        .tab-count { display: inline-block; margin-left: 8px; background: rgba(255,255,255,0.3); border-radius: 12px; padding: 2px 8px; font-size: 12px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
@@ -66,6 +69,10 @@
         .toast.show { opacity: 1; }
         .toast.success { background: #28a745; }
         .toast.error { background: #dc3545; }
+        .tab-summary { padding: 20px 30px; border-bottom: 2px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .tab-summary-count { padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 20px; }
+        .tab-summary-count.green { background: #e8f5e9; color: #2e7d32; }
+        .tab-summary-count.red { background: #ffebee; color: #c62828; }
     </style>
 </head>
 <body>
@@ -103,10 +110,13 @@
         <div id="statsGrid" class="stats-grid"></div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('wallets')">💼 Wallets</button>
-            <button class="tab-btn" onclick="switchTab('withdrawals')">💸 Withdrawal Requests</button>
+            <button class="tab-btn active-wallets" id="tab-btn-wallets" onclick="switchTab('wallets')">💼 Wallets</button>
+            <button class="tab-btn" id="tab-btn-withdrawals" onclick="switchTab('withdrawals')">💸 Withdrawal Requests</button>
+            <button class="tab-btn" id="tab-btn-sta" onclick="switchTab('sta')">🟢 STA — Active Bots <span class="tab-count" id="sta-count">0</span></button>
+            <button class="tab-btn" id="tab-btn-stp" onclick="switchTab('stp')">🔴 STP — Stopped Bots <span class="tab-count" id="stp-count">0</span></button>
         </div>
 
+        <!-- Wallets Tab -->
         <div id="walletsTab" class="tab-content active">
             <div class="table-container">
                 <div class="table-header">
@@ -115,18 +125,9 @@
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Wallet Address</th>
-                                <th>Email</th>
-                                <th>Type</th>
-                                <th>SOL</th>
-                                <th>Aetherbot</th>
-                                <th>Deposit</th>
-                                <th>Auto Trade</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                        <thead><tr>
+                            <th>Wallet Address</th><th>Email</th><th>Type</th><th>SOL</th><th>Aetherbot</th><th>Deposit</th><th>Auto Trade</th><th>Actions</th>
+                        </tr></thead>
                         <tbody id="walletsTableBody">
                             <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading...</td></tr>
                         </tbody>
@@ -135,6 +136,7 @@
             </div>
         </div>
 
+        <!-- Withdrawals Tab -->
         <div id="withdrawalsTab" class="tab-content">
             <div class="table-container">
                 <div class="table-header">
@@ -142,18 +144,57 @@
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Requested At</th>
-                                <th>Wallet Address</th>
-                                <th>ID</th>
-                                <th>Amount</th>
-                                <th>Destination</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
+                        <thead><tr>
+                            <th>Requested At</th><th>Wallet Address</th><th>ID</th><th>Amount</th><th>Destination</th><th>Status</th>
+                        </tr></thead>
                         <tbody id="withdrawalsTableBody">
                             <tr><td colspan="6" style="text-align: center; padding: 40px;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- STA Tab -->
+        <div id="staTab" class="tab-content">
+            <div class="table-container">
+                <div class="tab-summary">
+                    <div>
+                        <h2 style="color:#00c853; margin:0; font-size:18px;">🟢 STA — Active Bots</h2>
+                        <p style="margin:4px 0 0; color:#888; font-size:13px;" id="sta-subtitle">Wallets currently running auto-trade</p>
+                    </div>
+                    <div class="tab-summary-count green" id="sta-big-count">0</div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr>
+                            <th>Wallet Address</th><th>Email</th><th>Type</th><th>SOL</th><th>Aetherbot</th><th>Deposit</th><th>Auto Trade</th><th>Actions</th>
+                        </tr></thead>
+                        <tbody id="staTableBody">
+                            <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- STP Tab -->
+        <div id="stpTab" class="tab-content">
+            <div class="table-container">
+                <div class="tab-summary">
+                    <div>
+                        <h2 style="color:#ff1744; margin:0; font-size:18px;">🔴 STP — Stopped Bots</h2>
+                        <p style="margin:4px 0 0; color:#888; font-size:13px;" id="stp-subtitle">Wallets with auto-trade stopped</p>
+                    </div>
+                    <div class="tab-summary-count red" id="stp-big-count">0</div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr>
+                            <th>Wallet Address</th><th>Email</th><th>Type</th><th>SOL</th><th>Aetherbot</th><th>Deposit</th><th>Auto Trade</th><th>Actions</th>
+                        </tr></thead>
+                        <tbody id="stpTableBody">
+                            <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -275,7 +316,16 @@
             if (!res.ok) { logout(); return; }
             const data = await res.json();
             wallets = data.wallets;
-            const activeBots = wallets.filter(w => w.botStatus === 'running').length;
+
+            const staList = wallets.filter(w => w.botStatus === 'running');
+            const stpList = wallets.filter(w => w.botStatus !== 'running');
+
+            document.getElementById('sta-count').textContent = staList.length;
+            document.getElementById('stp-count').textContent = stpList.length;
+            document.getElementById('sta-big-count').textContent = staList.length;
+            document.getElementById('stp-big-count').textContent = stpList.length;
+            document.getElementById('sta-subtitle').textContent = `${staList.length} wallet${staList.length !== 1 ? 's' : ''} currently running auto-trade`;
+            document.getElementById('stp-subtitle').textContent = `${stpList.length} wallet${stpList.length !== 1 ? 's' : ''} with auto-trade stopped`;
 
             document.getElementById('statsGrid').innerHTML = `
                 <div class="stat-card"><h3>Total Wallets</h3><div class="value">${data.totals.totalWallets}</div></div>
@@ -284,9 +334,12 @@
                 <div class="stat-card"><h3>Total Deposit</h3><div class="value">${(data.totals.totalDeposit || 0).toFixed(2)}</div></div>
                 <div class="stat-card"><h3>SOL Credited</h3><div class="value">${data.totals.totalSolCredited.toFixed(4)}</div></div>
                 <div class="stat-card"><h3>Aetherbot Credited</h3><div class="value">${data.totals.totalAetherbotCredited.toFixed(2)}</div></div>
-                <div class="stat-card"><h3>🤖 Bots Active</h3><div class="value" style="color:#28a745;">${activeBots}</div></div>
+                <div class="stat-card"><h3>🟢 Bots Active</h3><div class="value" style="color:#28a745;">${staList.length}</div></div>
+                <div class="stat-card"><h3>🔴 Bots Stopped</h3><div class="value" style="color:#dc3545;">${stpList.length}</div></div>
             `;
-            displayWallets(wallets);
+            displayWallets(wallets, 'walletsTableBody');
+            displayWallets(staList, 'staTableBody');
+            displayWallets(stpList, 'stpTableBody');
             displayAllWithdrawals(wallets);
         } catch (e) {
             document.getElementById('walletsTableBody').innerHTML = `<tr><td colspan="8" style="text-align:center;color:red;">Error: ${e.message}</td></tr>`;
@@ -321,12 +374,13 @@
         `).join('');
     }
 
-    function displayWallets(list) {
+    function displayWallets(list, tbodyId) {
+        const tbody = document.getElementById(tbodyId);
         if (list.length === 0) {
-            document.getElementById('walletsTableBody').innerHTML = '<tr><td colspan="8" style="text-align:center;">No wallets found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#888;">No wallets found</td></tr>';
             return;
         }
-        document.getElementById('walletsTableBody').innerHTML = list.map(w => {
+        tbody.innerHTML = list.map(w => {
             const isRunning = w.botStatus === 'running';
             const statusBadge = isRunning
                 ? '<span class="auto-trade-on">🟢 ACTIVE</span>'
@@ -359,11 +413,8 @@
         const staBtn = document.getElementById(`sta-${walletId}`);
         const stpBtn = document.getElementById(`stp-${walletId}`);
         const statusCell = document.getElementById(`status-${walletId}`);
-
-        // Disable both buttons while processing
         if (staBtn) staBtn.disabled = true;
         if (stpBtn) stpBtn.disabled = true;
-
         try {
             const res = await fetch(`${API}/admin-toggle-bot`, {
                 method: 'POST',
@@ -373,7 +424,6 @@
             const data = await res.json();
             if (res.ok) {
                 const isRunning = botStatus === 'running';
-                // Update status badge instantly without reloading
                 if (statusCell) {
                     statusCell.innerHTML = isRunning
                         ? '<span class="auto-trade-on">🟢 ACTIVE</span>'
@@ -382,9 +432,9 @@
                 if (staBtn) staBtn.disabled = isRunning;
                 if (stpBtn) stpBtn.disabled = !isRunning;
                 showToast(isRunning ? `✅ Auto Trade STARTED` : `🛑 Auto Trade STOPPED`, isRunning ? 'success' : 'error');
+                await loadWallets();
             } else {
                 showToast(`Failed: ${data.error}`, 'error');
-                // Re-enable buttons on failure
                 if (staBtn) staBtn.disabled = false;
                 if (stpBtn) stpBtn.disabled = false;
             }
@@ -481,16 +531,21 @@
     function filterWallets() {
         const term = document.getElementById('searchBox').value.toLowerCase();
         const filtered = wallets.filter(w => w.walletAddress.toLowerCase().includes(term) || w.walletType.toLowerCase().includes(term) || (w.email || '').toLowerCase().includes(term));
-        displayWallets(filtered);
+        displayWallets(filtered, 'walletsTableBody');
     }
 
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
+    const TAB_IDS = ['wallets', 'withdrawals', 'sta', 'stp'];
+    const TAB_CONTENT = { wallets: 'walletsTab', withdrawals: 'withdrawalsTab', sta: 'staTab', stp: 'stpTab' };
+
     function switchTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        if (tabId === 'wallets') { document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('walletsTab').classList.add('active'); }
-        else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('withdrawalsTab').classList.add('active'); }
+        TAB_IDS.forEach(id => {
+            document.getElementById(`tab-btn-${id}`).className = 'tab-btn';
+            document.getElementById(TAB_CONTENT[id]).classList.remove('active');
+        });
+        document.getElementById(`tab-btn-${tabId}`).className = `tab-btn active-${tabId}`;
+        document.getElementById(TAB_CONTENT[tabId]).classList.add('active');
     }
 
     function logout() {
