@@ -1,8 +1,26 @@
 /**
- * Get Stock Price Endpoint
- * Fetches real stock prices from Alpha Vantage
- * Supports single ticker or multiple tickers
+ * Get Stock Price Endpoint (Finnhub-backed)
+ *
+ * Fetches live quotes for a comma-separated list of tickers using Finnhub's
+ * /quote endpoint. Finnhub's free tier allows 60 calls/minute, so fetching
+ * ~12 tickers per dashboard refresh is comfortably within limits.
+ *
+ * Query params:
+ *   tickers - comma-separated list, e.g. "AAPL,MSFT,GOOGL"
+ *
+ * Response shape (matches what the frontend expects):
+ * {
+ *   success: true,
+ *   data: {
+ *     AAPL: { price, change, changePct },
+ *     MSFT: { error: "..." },   // per-ticker errors don't fail the whole request
+ *     ...
+ *   }
+ * }
  */
+
+const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
+const FINNHUB_BASE = 'https://finnhub.io/api/v1';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -12,80 +30,99 @@ const headers = {
 };
 
 exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
-  if (event.httpMethod !== 'GET') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' };
+  }
+
+  if (event.httpMethod !== 'GET') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
+  if (!FINNHUB_API_KEY) {
+    console.error('💥 Missing FINNHUB_API_KEY environment variable');
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Server misconfiguration: missing Finnhub API key' })
+    };
+  }
 
   try {
-    const apiKey = process.env.ALPHAVANTAGE_API_KEY;
-    if (!apiKey) {
-      return { statusCode: 503, headers, body: JSON.stringify({ error: 'Alpha Vantage API key not configured' }) };
+    const tickersParam = event.queryStringParameters?.tickers || '';
+    const tickers = tickersParam
+      .split(',')
+      .map(t => t.trim().toUpperCase())
+      .filter(Boolean);
+
+    if (tickers.length === 0) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Missing or empty "tickers" query parameter' })
+      };
     }
 
-    // Get ticker(s) from query string
-    // e.g. /get-stock-price?ticker=AAPL
-    // e.g. /get-stock-price?tickers=AAPL,MSFT,GOOGL
-    const { ticker, tickers } = event.queryStringParameters || {};
+    console.log(`📈 Fetching quotes for ${tickers.length} tickers from Finnhub`);
 
-    if (!ticker && !tickers) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'ticker or tickers query parameter required' }) };
-    }
+    // Finnhub's free tier has no batch-quote endpoint, so we call /quote
+    // once per ticker. 60 req/min free-tier limit comfortably covers a
+    // typical watchlist (e.g. 12 tickers refreshed every few minutes).
+    const results = await Promise.all(
+      tickers.map(async (ticker) => {
+        try {
+          const url = `${FINNHUB_BASE}/quote?symbol=${encodeURIComponent(ticker)}&token=${FINNHUB_API_KEY}`;
+          const res = await fetch(url);
 
-    // Build list of tickers to fetch
-    const tickerList = tickers ? tickers.split(',').map(t => t.trim().toUpperCase()) : [ticker.toUpperCase()];
+          if (!res.ok) {
+            if (res.status === 429) {
+              return [ticker, { error: 'Rate limited by Finnhub. Try again shortly.' }];
+            }
+            return [ticker, { error: `Finnhub returned status ${res.status}` }];
+          }
 
-    // Fetch prices for all tickers
-    const results = {};
-    for (const sym of tickerList) {
-      try {
-        const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sym}&apikey=${apiKey}`;
-        const res = await fetch(url);
-        const data = await res.json();
+          const quote = await res.json();
 
-        const quote = data['Global Quote'];
-        if (!quote || !quote['05. price']) {
-          results[sym] = { error: 'No data available', ticker: sym };
-          continue;
+          // Finnhub returns all zeros for an unknown/invalid symbol
+          if (
+            quote.c === 0 &&
+            quote.h === 0 &&
+            quote.l === 0 &&
+            quote.o === 0
+          ) {
+            return [ticker, { error: 'No data returned for this ticker' }];
+          }
+
+          return [
+            ticker,
+            {
+              price: quote.c,       // current price
+              change: quote.d,      // change
+              changePct: quote.dp   // percent change
+            }
+          ];
+        } catch (err) {
+          console.error(`⚠️  Failed to fetch ${ticker}:`, err.message);
+          return [ticker, { error: err.message }];
         }
+      })
+    );
 
-        results[sym] = {
-          ticker: sym,
-          price: parseFloat(quote['05. price']),
-          change: parseFloat(quote['09. change']),
-          changePct: parseFloat(quote['10. change percent'].replace('%', '')),
-          open: parseFloat(quote['02. open']),
-          high: parseFloat(quote['03. high']),
-          low: parseFloat(quote['04. low']),
-          volume: parseInt(quote['06. volume']),
-          previousClose: parseFloat(quote['08. previous close']),
-          lastUpdated: quote['07. latest trading day']
-        };
+    const data = Object.fromEntries(results);
 
-        console.log(`✅ Fetched ${sym}: $${results[sym].price}`);
-
-        // Alpha Vantage free tier: 5 requests/minute
-        // Add small delay between requests if multiple tickers
-        if (tickerList.length > 1) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-        }
-
-      } catch (err) {
-        console.error(`❌ Failed to fetch ${sym}:`, err.message);
-        results[sym] = { error: err.message, ticker: sym };
-      }
-    }
+    console.log('✅ Stock prices fetched:', Object.keys(data).length, 'tickers');
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        success: true,
-        data: results,
-        fetchedAt: new Date().toISOString()
-      })
+      body: JSON.stringify({ success: true, data })
     };
-
   } catch (error) {
-    console.error('Get stock price error:', error);
+    console.error('💥 get-stock-price error:', error.message);
     return {
       statusCode: 500,
       headers,
