@@ -79,7 +79,9 @@ class FirebaseWalletStore {
           autoSnipeBot: { integerValue: 0 },
           totalTrade: { integerValue: 0 },
           withdrawal: { stringValue: '' },
-          botStatus: { stringValue: 'paused' }
+         botStatus: { stringValue: 'paused' },
+stockBalance: { doubleValue: 0 },
+stockHoldings: { mapValue: { fields: {} } }
         }
       };
 
