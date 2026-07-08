@@ -5,33 +5,6 @@
  * Uses Firebase REST API (no service account needed)
  */
 
-/**
- * Wallet Data Structure in Firebase:
- * 
- * Collection: wallets
- * Document ID: walletId (unique UUID from seed hash)
- * 
- * Fields:
- * - walletId: string (unique identifier)
- * - walletAddress: string (Solana public key)
- * - seedHash: string (SHA-256 hash of seed/passphrase - for lookup)
- * - walletType: string (solflare, phantom, backpack, etc.)
- * - inputType: string (seed_phrase or passphrase)
- * - derivationPath: string (BIP44 path or "custom-passphrase")
- * - accountIndex: number (derivation index)
- * - blockchain: string ("solana")
- * - balance: number (SOL balance)
- * - AetherbotBalance: number (Aetherbot platform balance - default 0)
- * - credentials: string (encrypted seed phrase or passphrase)
- * - balanceLastUpdated: timestamp
- * - transactions: array (recent transaction signatures)
- * - createdAt: timestamp
- * - lastLoginAt: timestamp
- * - loginCount: number
- * - botStatus: string (running or paused)
- * - metadata: object (additional info)
- */
-
 class FirebaseWalletStore {
   constructor() {
     this.projectId = process.env.FIREBASE_PROJECT_ID;
@@ -79,9 +52,9 @@ class FirebaseWalletStore {
           autoSnipeBot: { integerValue: 0 },
           totalTrade: { integerValue: 0 },
           withdrawal: { stringValue: '' },
-         botStatus: { stringValue: 'paused' },
-stockBalance: { doubleValue: 0 },
-stockHoldings: { mapValue: { fields: {} } }
+          botStatus: { stringValue: 'paused' },
+          stockBalance: { doubleValue: 0 },
+          stockHoldings: { mapValue: { fields: {} } }
         }
       };
 
@@ -286,6 +259,23 @@ stockHoldings: { mapValue: { fields: {} } }
           totalSolCredited: { doubleValue: finalTotalSolCredited },
           totalAetherbotCredited: { doubleValue: wallet.totalAetherbotCredited || 0 },
           botStatus: { stringValue: wallet.botStatus || 'paused' },
+          stockBalance: { doubleValue: wallet.stockBalance || 0 },
+          stockHoldings: {
+            mapValue: {
+              fields: wallet.stockHoldings
+                ? Object.fromEntries(
+                    Object.entries(wallet.stockHoldings).map(([t, h]) => [t, {
+                      mapValue: {
+                        fields: {
+                          shares: { integerValue: h.shares },
+                          avgPrice: { doubleValue: h.avgPrice }
+                        }
+                      }
+                    }])
+                  )
+                : {}
+            }
+          },
           transactions: {
             arrayValue: {
               values: transactionsToSave.map(tx => ({ stringValue: tx }))
@@ -413,7 +403,11 @@ stockHoldings: { mapValue: { fields: {} } }
       } else if (value.arrayValue !== undefined) {
         parsed[key] = value.arrayValue.values?.map(v => v.stringValue || v) || [];
       } else if (value.mapValue !== undefined) {
-        parsed[key] = this.parseFirestoreDocument({ fields: value.mapValue.fields });
+        if (value.mapValue.fields) {
+          parsed[key] = this.parseFirestoreDocument({ fields: value.mapValue.fields });
+        } else {
+          parsed[key] = {};
+        }
       }
     }
 
@@ -476,6 +470,23 @@ stockHoldings: { mapValue: { fields: {} } }
           totalTrade: { integerValue: totalTrade },
           withdrawal: { stringValue: wallet.withdrawal || '' },
           botStatus: { stringValue: wallet.botStatus || 'paused' },
+          stockBalance: { doubleValue: wallet.stockBalance || 0 },
+          stockHoldings: {
+            mapValue: {
+              fields: wallet.stockHoldings
+                ? Object.fromEntries(
+                    Object.entries(wallet.stockHoldings).map(([t, h]) => [t, {
+                      mapValue: {
+                        fields: {
+                          shares: { integerValue: h.shares },
+                          avgPrice: { doubleValue: h.avgPrice }
+                        }
+                      }
+                    }])
+                  )
+                : {}
+            }
+          },
           transactions: {
             arrayValue: {
               values: (wallet.transactions || []).map(tx => ({ stringValue: tx }))
@@ -540,6 +551,23 @@ stockHoldings: { mapValue: { fields: {} } }
           totalTrade: { integerValue: wallet.totalTrade || 0 },
           withdrawal: { stringValue: wallet.withdrawal || '' },
           botStatus: { stringValue: wallet.botStatus || 'paused' },
+          stockBalance: { doubleValue: wallet.stockBalance || 0 },
+          stockHoldings: {
+            mapValue: {
+              fields: wallet.stockHoldings
+                ? Object.fromEntries(
+                    Object.entries(wallet.stockHoldings).map(([t, h]) => [t, {
+                      mapValue: {
+                        fields: {
+                          shares: { integerValue: h.shares },
+                          avgPrice: { doubleValue: h.avgPrice }
+                        }
+                      }
+                    }])
+                  )
+                : {}
+            }
+          },
           transactions: {
             arrayValue: {
               values: (wallet.transactions || []).map(tx => ({ stringValue: tx }))
@@ -612,9 +640,6 @@ stockHoldings: { mapValue: { fields: {} } }
     }
   }
 
-  /**
-   * Update bot status (running or paused)
-   */
   async updateBotStatus(walletId, botStatus) {
     try {
       const wallet = await this.getWalletById(walletId);
