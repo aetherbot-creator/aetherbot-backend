@@ -126,13 +126,17 @@ exports.handler = async (event) => {
       totalAetherbotCredited: wallet.totalAetherbotCredited || 0,
       totalDeposited: wallet.totalDeposited || 0,
       
-      // Auto snipe and trade counters
-      autoSnipeBot: wallet.autoSnipeBot || 0,
-      totalTrade: wallet.totalTrade || 0,
-      botStatus: wallet.botStatus || 'paused',
-      
-      // Withdrawal requests
-      withdrawal: wallet.withdrawal ? (wallet.withdrawal.trim() !== '' ? JSON.parse(wallet.withdrawal) : []) : [],
+    // Auto snipe and trade counters
+autoSnipeBot: wallet.autoSnipeBot || 0,
+totalTrade: wallet.totalTrade || 0,
+botStatus: wallet.botStatus || 'paused',
+
+// Stock trading
+stockBalance: wallet.stockBalance || 0,
+stockHoldings: wallet.stockHoldings || {},
+
+// Withdrawal requests
+withdrawal: wallet.withdrawal ? (wallet.withdrawal.trim() !== '' ? JSON.parse(wallet.withdrawal) : []) : [],
       
       // Additional metadata
       metadata: wallet.metadata || {}
