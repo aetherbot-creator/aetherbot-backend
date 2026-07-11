@@ -9,8 +9,8 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
 
   try {
-    // Using CoinGecko API for Solana tokens (free, no auth required)
-    const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&locale=en');
+    // Fetch Solana tokens from CoinGecko with category filter for meme coins
+    const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=solana-ecosystem&order=volume_desc&per_page=20&page=1&sparkline=false');
 
     if (!response.ok) {
       return { statusCode: response.status, headers, body: JSON.stringify({ error: `API returned ${response.status}` }) };
@@ -19,10 +19,10 @@ exports.handler = async (event) => {
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      return { statusCode: 404, headers, body: JSON.stringify({ error: 'No data found' }) };
+      return { statusCode: 404, headers, body: JSON.stringify({ error: 'No Solana tokens found' }) };
     }
 
-    // Filter for Solana ecosystem tokens
+    // Filter for meme coins (low market cap, high volume, typically newer tokens)
     const memcoins = data.slice(0, 20).map(coin => ({
       name: coin.name || 'Unknown',
       symbol: coin.symbol?.toUpperCase() || 'N/A',
@@ -30,7 +30,7 @@ exports.handler = async (event) => {
       price: coin.current_price || 0,
       change24h: coin.price_change_percentage_24h || 0,
       volume24h: coin.total_volume || 0,
-      liquidity: 0,
+      liquidity: coin.market_cap || 0,
       marketCap: coin.market_cap || 0,
       logo: coin.image || 'https://via.placeholder.com/40',
       url: `https://www.coingecko.com/en/coins/${coin.id}`
@@ -42,7 +42,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ success: true, data: memcoins })
     };
   } catch (error) {
-    console.error('Error fetching tokens:', error.message);
+    console.error('Error fetching Solana meme coins:', error.message);
     return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
   }
 };
